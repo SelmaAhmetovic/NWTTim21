@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "USER")
-public class Role {
+public class User {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -31,19 +31,19 @@ public class Role {
           this.id = id;
     }
 
-    public void setFirstName(int firstName) {
+    public void setFirstName(String firstName) {
           this.firstName = firstName;
     }
 
-    public void setLastName(int lastName) {
+    public void setLastName(String lastName) {
           this.lastName = lastName;
     }
 
-    public void setUserName(int userName) {
+    public void setUserName(String userName) {
           this.userName = userName;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
           this.password = password;
     }
 
