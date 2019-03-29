@@ -13,3 +13,4 @@
 #### 29.03.
 * Introduction to Java and Spring - c2 articles - 2h
 * Error - MySQL default root permissions - [(fix)](https://askubuntu.com/a/940025) - 1h
+* Models and Entities - 2h
