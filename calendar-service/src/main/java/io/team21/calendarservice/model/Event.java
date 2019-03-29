@@ -10,4 +10,8 @@ public class Event {
     private String days;
     private Calendar calendar;
     private int RoomId;
+
+    public Event() {
+
+    }
 }

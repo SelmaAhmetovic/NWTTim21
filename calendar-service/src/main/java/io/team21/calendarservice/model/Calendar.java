@@ -4,4 +4,8 @@ public class Calendar {
     private int id;
     private String name;
     private int UserId;
+
+    public Calendar() {
+
+    }
 }
