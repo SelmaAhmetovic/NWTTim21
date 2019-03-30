@@ -1,4 +1,4 @@
-package com.example.easynotes.model;
+package com.rooms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;

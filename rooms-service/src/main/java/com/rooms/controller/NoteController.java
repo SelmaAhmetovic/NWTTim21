@@ -1,8 +1,9 @@
-package com.example.easynotes.controller;
+package com.rooms.controller;
 
-import com.example.easynotes.exception.ResourceNotFoundException;
-import com.example.easynotes.model.Note;
-import com.example.easynotes.repository.NoteRepository;
+import com.rooms.exception.ResourceNotFoundException;
+import com.rooms.model.Note;
+import com.rooms.repository.NoteRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

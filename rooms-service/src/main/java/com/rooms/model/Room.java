@@ -1,7 +1,9 @@
-package com.example.easynotes.model;
+package com.rooms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -28,7 +30,11 @@ public class Room {
     public Long getId() {
         return id;
     }
-
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public void setRoomName(String roomName) {
         this.roomName = roomName;
     }
@@ -43,5 +49,25 @@ public class Room {
 
     public String getLocation() {
         return location;
+    }
+    
+    public void setRoomCapacity(int roomCapacity) {
+        this.roomCapacity = roomCapacity;
+    }
+
+    public int getRoomCapacity() {
+        return roomCapacity;
+    }
+    
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<RoomReservation> roomReservations;
+    
+    
+    public List<RoomReservation> getRoomReservations() {
+        return roomReservations;
+    }
+
+    public void setRoomReservations(List<RoomReservation> reservations) {
+        this.roomReservations = reservations;
     }
 }
