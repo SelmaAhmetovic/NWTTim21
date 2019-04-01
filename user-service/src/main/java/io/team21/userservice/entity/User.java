@@ -1,8 +1,6 @@
 package io.team21.userservice.entity;
-
-import java.util.List;
-
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "USER")
@@ -24,7 +22,13 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-    protected User() {
+    @ManyToMany
+    @JoinTable(name = "userrole",
+            joinColumns = { @JoinColumn(name = "userid", referencedColumnName = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "roleid", referencedColumnName = "id") })
+    private Collection<Role> roles;
+
+    public User() {
     }
 
     public void setId(int id) {
@@ -64,5 +68,13 @@ public class User {
 
     public String getPassword() {
          return password;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
     }
 }

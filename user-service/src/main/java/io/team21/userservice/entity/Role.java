@@ -1,6 +1,8 @@
 package io.team21.userservice.entity;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -15,15 +17,18 @@ public class Role {
     @Column(name = "NAME")
     private String name;
 
-    protected Role() {
+    @ManyToMany(mappedBy = "roles")
+    private Collection<User> users;
+
+    public Role() {
     }
 
     public void setId(int id) {
           this.id = id;
     }
 
-    public void setName(int id) {
-              this.id = id;
+    public void setName(String name) {
+              this.name = name;
     }
 
     public int getId() {
