@@ -10,6 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import com.rooms.model.RoomReservation;
 
+/**
+ * Room reservation entity repository
+ * @author Adijata
+ *
+ */
 @Repository
 public interface RoomReservationRepository extends JpaRepository<RoomReservation, Long> {
 	 @Query("select id, reservationTime from RoomReservation " + 

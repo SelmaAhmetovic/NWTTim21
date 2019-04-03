@@ -1,0 +1,5 @@
+com.rooms
+com.rooms.controller
+com.rooms.exception
+com.rooms.model
+com.rooms.repository
