@@ -17,6 +17,15 @@ public class RoleService {
         return this.roleDao.findAll();
     }
 
+    public Role findOneRole(int roleId) {
+        return this.roleDao.getOne(roleId);
+    }
+
+    public String deleteRoleById(int roleId) {
+        this.roleDao.deleteRoleById(roleId);
+        return "Role is successfully deleted";
+    }
+
     public Role addRole(Role role) {
         return this.roleDao.save(role);
     }
