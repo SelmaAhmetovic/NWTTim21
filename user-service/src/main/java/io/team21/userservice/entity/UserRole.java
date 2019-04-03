@@ -7,10 +7,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "USERROLE")
 public class UserRole {
-    @Id
+/*    @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private int id;*/
 
     @Column(name = "USERID")
     private int userId;
@@ -21,9 +21,11 @@ public class UserRole {
     protected UserRole() {
     }
 
+/*
     public void setId(int id) {
         this.id = id;
     }
+*/
 
     public void setUserId(int userId) {
         this.userId = userId;
@@ -33,9 +35,9 @@ public class UserRole {
         this.roleId = roleId;
     }
 
-    public int getId() {
+/*    public int getId() {
         return id;
-    }
+    }*/
 
     public int getUserId() {
         return userId;

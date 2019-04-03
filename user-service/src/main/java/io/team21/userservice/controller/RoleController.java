@@ -52,7 +52,7 @@ public class RoleController {
         return status1 + status2;
     }
 
-    //@CrossOrigin(origins = "http://localhost:9000")
+   /* //@CrossOrigin(origins = "http://localhost:9000")
     @RequestMapping(value = "/updateRole/{id}", method= RequestMethod.PUT)
     public ResponseEntity<Role> updateRole(@RequestBody Role role, @PathVariable int id) {
 
@@ -62,7 +62,7 @@ public class RoleController {
         roleService.addRole(role);
 
         return ResponseEntity.noContent().build();
-    }
+    }*/
 
 
 }
