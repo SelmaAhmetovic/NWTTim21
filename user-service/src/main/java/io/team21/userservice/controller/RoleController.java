@@ -43,11 +43,11 @@ public class RoleController {
     }
 
     @RequestMapping(value = "/updateRole/{id}", method= RequestMethod.PUT)
-    public ResponseEntity<Role> updateRole(@RequestBody Role role, @PathVariable int id) {
+    public String updateRole(@RequestBody Role role, @PathVariable int id) {
         Role roleById = roleService.findOneRole(id);
         role.setId(id);
         roleService.addRole(role);
-        return ResponseEntity.noContent().build();
+        return "Role is successfully updated";
     }
 
 
