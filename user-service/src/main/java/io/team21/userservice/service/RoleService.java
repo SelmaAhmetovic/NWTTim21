@@ -1,7 +1,6 @@
 package io.team21.userservice.service;
 
 import io.team21.userservice.dao.RoleDao;
-import io.team21.userservice.dao.UserDao;
 import io.team21.userservice.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

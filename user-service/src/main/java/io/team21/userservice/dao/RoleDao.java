@@ -4,6 +4,7 @@ import io.team21.userservice.entity.Role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -20,13 +21,9 @@ public interface RoleDao extends JpaRepository<Role, Integer> {
     List<Role> findByName(List<String> roleName);
 
     @Transactional
-    @Query("DELETE FROM ROLE WHERE ID = ?1")
+    @Modifying
+    @Query("DELETE FROM Role r WHERE r.id = ?1")
     void deleteRoleById(int id);
-
-    @Transactional
-    @Query("DELETE FROM ROLE WHERE ID = ?1")
-    void updateRole(int id);
-
 
 }
 

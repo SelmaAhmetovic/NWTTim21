@@ -1,10 +1,8 @@
 package io.team21.userservice.service;
 import io.team21.userservice.dao.RoleDao;
-//import io.team21.userservice.dao.UserRoleDao;
 import io.team21.userservice.entity.Role;
 import io.team21.userservice.entity.User;
 import io.team21.userservice.dao.UserDao;
-//import io.team21.userservice.entity.UserRole;
 import io.team21.userservice.model.UserModel;
 import org.springframework.stereotype.Service;
 
@@ -61,9 +59,27 @@ public class UserService {
         }
     }
 
-    // public UserModel deleteUser(UserModel user) { return this.userDao.delete(user); }
+    public String deteleUserById(int userId) {
+        this.userDao.deleteUserById(userId);
+        return "User is successfully deleted";
+    }
+
+    public User findOneUser(int userId) {
+        return this.userDao.getOne(userId);
+    }
+
+    public UserModel findOneUserModel(int userId) {
+        User user = this.userDao.getOne(userId);
+        UserModel tmp = new UserModel();
+        tmp.setFirstName(user.getFirstName());
+        tmp.setLastName(user.getLastName());
+        tmp.setId(user.getId());
+        tmp.setUserName(user.getUserName());
+        tmp.setPassword(user.getPassword());
+        tmp.setRoleNames(user.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
+        return tmp;
+    }
+
 }
 
-
-//other methods omitted for brevity
 
