@@ -1,16 +1,21 @@
 package io.team21.userservice.model;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 public class UserModel {
     private int id;
 
+    @NotBlank
     private String firstName;
 
+    @NotBlank
     private String lastName;
 
+    @NotBlank
     private String userName;
 
+    @NotBlank
     private String password;
 
     private List<String> roleNames;

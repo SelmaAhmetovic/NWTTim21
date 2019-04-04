@@ -2,7 +2,9 @@ package io.team21.userservice.service;
 
 import io.team21.userservice.dao.RoleDao;
 import io.team21.userservice.entity.Role;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +19,12 @@ public class RoleService {
     }
 
     public Role findOneRole(int roleId) {
-        return this.roleDao.getOne(roleId);
+        try{
+            return this.roleDao.getOne(roleId);
+        }catch (DataAccessException ex){
+            //dodati logiku za error
+            return  null;
+        }
     }
 
     public String deleteRoleById(int roleId) {
@@ -28,6 +35,16 @@ public class RoleService {
     public Role addRole(Role role) {
         return this.roleDao.save(role);
     }
+
+    public Role updateRole(Role role) {
+        Role tmp = findOneRole(role.getId());
+        if(tmp != null){
+            return this.roleDao.save(role);
+        }
+        return  null;
+    }
+
+
 
     public int countRoles() {
         List<Role> roles = this.roleDao.findAll();

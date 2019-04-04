@@ -1,13 +1,16 @@
 package io.team21.userservice.controller;
 
 import io.team21.userservice.entity.User;
+import io.team21.userservice.exception.ObjectNotValidException;
+import io.team21.userservice.model.Response;
 import io.team21.userservice.model.UserModel;
 import io.team21.userservice.service.UserService;
-import io.team21.userservice.exception.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
@@ -16,12 +19,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.validation.Valid;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -38,9 +37,12 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    @RequestMapping(value = "/allUsers", method = RequestMethod.GET)
-    public List<UserModel> getAllUsers() {
-        return userService.getAllUsers();
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ResponseEntity<Response<List<UserModel>>> getAllUsers() {
+        Response<List<UserModel>> resp = new Response<List<UserModel>>();
+        resp.message = HttpStatus.OK.toString();
+        resp.result = userService.getAllUsers();
+        return ResponseEntity.ok().body(resp);
     }
 
 
@@ -52,14 +54,14 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    @RequestMapping(value = "/getUser/{userId}", method= RequestMethod.GET)
-    public ResponseEntity<User> getUserById(
+    @RequestMapping(value = "/{userId}", method= RequestMethod.GET)
+    public ResponseEntity<Response<UserModel>> getUserById(
             @ApiParam(value = "User id from which user object will retrieve", required = true)
-            @PathVariable("userId") int userId)
-            throws ResourceNotFoundException {
-        User user = userService.findOneUser(userId);
-        //.orElseThrow(() - > new ResourceNotFoundException("User not found for this id :: " + userId));
-        return ResponseEntity.ok().body(user);
+            @PathVariable("userId") int userId) {
+        Response<UserModel> resp = new Response<UserModel>();
+        resp.message = HttpStatus.OK.toString();
+        resp.result = this.userService.findOneUserModel(userId);
+        return ResponseEntity.ok().body(resp);
     }
 
     //POST
@@ -70,12 +72,22 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody()
-    public UserModel addNewUser(
+    public ResponseEntity<Response<UserModel>> addNewUser(
             @ApiParam(value = "Store an user object in database table", required = true)
-            @Valid @RequestBody UserModel user) {
-        return this.userService.addUser(user);
+            @Valid @RequestBody UserModel userModel, Errors errors) {
+        Response<UserModel> resp = new Response<UserModel>();
+
+        if (errors.hasErrors()) {
+            ObjectNotValidException ex = new ObjectNotValidException(errors);
+            resp.message = ex.toString();
+            return ResponseEntity.badRequest().body(resp);
+        }
+        resp.message = HttpStatus.OK.toString();
+        resp.result = this.userService.addUser(userModel);
+        return ResponseEntity.ok().body(resp);
+
     }
 
 
@@ -88,21 +100,23 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    @RequestMapping(value = "/updateUser/{userId}", method= RequestMethod.PUT)
-    public ResponseEntity <UserModel> updateUser(
+    @RequestMapping(value = "/{userId}", method= RequestMethod.PUT)
+    public ResponseEntity<Response<UserModel>> updateUser(
             @ApiParam(value = "Update an role object in database table", required = true)
-            @Valid @RequestBody UserModel user,
-            @PathVariable int userId)
-            throws ResourceNotFoundException {
-        UserModel userById = userService.findOneUserModel(userId);
-        //.orElseThrow(() - > new ResourceNotFoundException("User not found for this id :: " + userId));
+            @PathVariable int userId,
+            @Valid @RequestBody UserModel user, Errors errors) {
+        Response<UserModel> resp = new Response<UserModel>();
+        if (errors.hasErrors()) {
+            ObjectNotValidException ex = new ObjectNotValidException(errors);
+            resp.message = ex.toString();
+            return ResponseEntity.badRequest().body(resp);
+        }
+        resp.message = HttpStatus.OK.toString();
+        UserModel userModel= this.userService.findOneUserModel(userId);
         user.setId(userId);
-        userService.addUser(user);
-        return ResponseEntity.ok(userById);
-       /* UserModel userById = userService.findOneUserModel(userId);
-        user.setId(userId);
-        userService.addUser(user);
-        return "User is successfully updated";*/
+        resp.result = this.userService.addUser(user);
+        return ResponseEntity.ok().body(resp);
+
     }
 
     //DELETE
@@ -113,18 +127,13 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    @RequestMapping(value = "/deleteUser/{userId}", method = RequestMethod.DELETE)
-    public Map < String, Boolean > deleteUserById (
+    @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Response<String>> deleteUserById (
             @ApiParam(value = "Delete an user object from database table", required = true)
-            @PathVariable("userId") int userId)
-            throws ResourceNotFoundException
-    {
-        UserModel userById = userService.findOneUserModel(userId);
-        //.orElseThrow(() - > new ResourceNotFoundException("User not found for this id :: " + userId));
-        String status1 = userService.deteleUserById(userId);
-        Map < String, Boolean > response = new HashMap < > ();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+            @PathVariable("userId") int userId) {
+        Response<String> resp = new Response<String>();
+        resp.result = this.userService.deteleUserById(userId);;
+        resp.message = HttpStatus.OK.toString();
+        return ResponseEntity.ok().body(resp);
     }
-
 }

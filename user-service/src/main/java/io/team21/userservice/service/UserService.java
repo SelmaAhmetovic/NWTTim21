@@ -60,6 +60,7 @@ public class UserService {
     }
 
     public String deteleUserById(int userId) {
+        //uraditi find da vidimo da li postoji user, ako postoji onda uraditi delete, ako ne vratiti error not found
         this.userDao.deleteUserById(userId);
         return "User is successfully deleted";
     }
@@ -69,15 +70,23 @@ public class UserService {
     }
 
     public UserModel findOneUserModel(int userId) {
-        User user = this.userDao.getOne(userId);
-        UserModel tmp = new UserModel();
-        tmp.setFirstName(user.getFirstName());
-        tmp.setLastName(user.getLastName());
-        tmp.setId(user.getId());
-        tmp.setUserName(user.getUserName());
-        tmp.setPassword(user.getPassword());
-        tmp.setRoleNames(user.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
-        return tmp;
+        try {
+            User user = this.userDao.getOne(userId);
+            if(user != null) {
+                UserModel tmp = new UserModel();
+                tmp.setFirstName(user.getFirstName());
+                tmp.setLastName(user.getLastName());
+                tmp.setId(user.getId());
+                tmp.setUserName(user.getUserName());
+                tmp.setPassword(user.getPassword());
+                tmp.setRoleNames(user.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
+                return tmp;
+            }
+            return  null;
+        }catch (Exception ex){
+            //dodati logiku za error
+            return  null;
+        }
     }
 
 }

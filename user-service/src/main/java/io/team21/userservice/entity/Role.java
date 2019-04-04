@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,6 +21,7 @@ public class Role {
     private int id;
 
     @ApiModelProperty(notes = "The role name")
+    @NotBlank
     @Column(name = "NAME")
     private String name;
 
