@@ -6,14 +6,20 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "ROLE")
+@ApiModel(description = "All details about the Role. ")
 public class Role {
     @Id
     @Column(name = "ID")
+    @ApiModelProperty(notes = "The database generated role ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
+    @ApiModelProperty(notes = "The role name")
     @Column(name = "NAME")
     private String name;
 
@@ -37,5 +43,10 @@ public class Role {
 
     public String getName() {
          return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Role [id=" + id + ", name=" + name + "]";
     }
 }

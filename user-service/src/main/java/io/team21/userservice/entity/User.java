@@ -2,24 +2,34 @@ package io.team21.userservice.entity;
 import javax.persistence.*;
 import java.util.Collection;
 
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "USER")
+@ApiModel(description = "All details about the User. ")
 public class User {
     @Id
     @Column(name = "ID")
+    @ApiModelProperty(notes = "The database generated user ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     @Column(name = "FIRSTNAME")
+    @ApiModelProperty(notes = "The user first name")
     private String firstName;
 
     @Column(name = "LASTNAME")
+    @ApiModelProperty(notes = "The user last name")
     private String lastName;
 
     @Column(name = "USERNAME")
+    @ApiModelProperty(notes = "The user username")
     private String userName;
 
     @Column(name = "PASSWORD")
+    @ApiModelProperty(notes = "The user password")
     private String password;
 
     @ManyToMany
@@ -76,5 +86,11 @@ public class User {
 
     public Collection<Role> getRoles() {
         return roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", userName=" + userName +
+                "]";
     }
 }
