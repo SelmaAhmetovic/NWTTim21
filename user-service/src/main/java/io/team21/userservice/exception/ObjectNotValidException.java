@@ -39,4 +39,13 @@ public class ObjectNotValidException  {
     public String toString() {
         return error;
     }
+
+    public static boolean isNumeric(String strNum) {
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
+    }
 }

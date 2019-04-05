@@ -45,7 +45,7 @@ public class UserService {
         tmpUser.setLastName(user.getLastName());
         tmpUser.setPassword(user.getPassword());
         tmpUser.setUserName(user.getUserName());
-
+        tmpUser.setId(user.getId());
         try{
             //TODO: provjeriti da li postoje role u bazi
             tmpUser.setRoles(roleDao.findByName(user.getRoleNames()));

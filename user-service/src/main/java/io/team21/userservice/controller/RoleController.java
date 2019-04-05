@@ -65,6 +65,24 @@ public class RoleController {
                  return ResponseEntity.ok().body(resp);
             }
 
+/*    @PathVariable("roleId") String roleId)
+    {
+        ObjectNotValidException ex = new ObjectNotValidException(errors);
+        boolean checkIntegerType = ex.isNumeric(roleId);
+        if(checkIntegerType) {
+            int newRoleId = Integer.parseInt(roleId);
+            Response<Role> resp = new Response<Role>();
+            resp.message = HttpStatus.OK.toString();
+            resp.result = this.roleService.findOneRole(newRoleId);
+            return ResponseEntity.ok().body(resp);
+        } else {
+            resp.message = HttpStatus.NOT_FOUND.toString();
+            resp.result = null;
+            return ResponseEntity.ok().body(resp);
+        }
+
+    }*/
+
 
     //POST
     @ApiOperation(value = "Add a role")
@@ -78,20 +96,15 @@ public class RoleController {
     @ResponseBody()
     public ResponseEntity<Response<Role>> addNewRole(
             @ApiParam(value = "Store a role object in database table", required = true)
-            @Valid @RequestBody RoleModel role,  Errors errors) {
+            @Valid @RequestBody Role role,  Errors errors) {
         Response<Role> resp = new Response<Role>();
-
         if (errors.hasErrors()) {
             ObjectNotValidException ex = new ObjectNotValidException(errors);
             resp.message = ex.toString();
             return ResponseEntity.badRequest().body(resp);
         }
-        Role entityModel = new Role();
-        entityModel.setId(role.getId());
-        entityModel.setName(role.getName());
-
         resp.message = HttpStatus.OK.toString();
-        resp.result = this.roleService.addRole(entityModel);
+        resp.result = this.roleService.addRole(role);
         return ResponseEntity.ok().body(resp);
     }
 
