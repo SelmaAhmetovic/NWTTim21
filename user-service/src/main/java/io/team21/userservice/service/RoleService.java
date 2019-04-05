@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -21,7 +22,7 @@ public class RoleService {
     public Role findOneRole(int roleId) {
         try{
             return this.roleDao.getOne(roleId);
-        }catch (DataAccessException ex){
+        }catch (EntityNotFoundException ex){
             //dodati logiku za error
             return  null;
         }
@@ -52,6 +53,15 @@ public class RoleService {
             return 0;
         }
         return roles.size();
+    }
+
+    public static boolean isNumeric(String strNum) {
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
     }
 
 }

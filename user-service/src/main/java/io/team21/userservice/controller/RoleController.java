@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -55,33 +56,28 @@ public class RoleController {
     @RequestMapping(value = "/{roleId}", method= RequestMethod.GET)
     public ResponseEntity<Response<Role>> getRoleById(
             @ApiParam(value = "Role id from which role object will retrieve", required = true)
-            @PathVariable("roleId") int roleId)
-             {
-                 Response<Role> resp = new Response<Role>();
-
-                 resp.message = HttpStatus.OK.toString();
-                 resp.result = this.roleService.findOneRole(roleId);
-
-                 return ResponseEntity.ok().body(resp);
+            @PathVariable("roleId") String roleId,  Error errors)
+        {
+            boolean checkIntegerType = roleService.isNumeric(roleId);
+            Response<Role> resp = new Response<Role>();
+            if(checkIntegerType) {
+                try {
+                    int newRoleId = Integer.parseInt(roleId);
+                    resp.message = HttpStatus.OK.toString();
+                    resp.result = this.roleService.findOneRole(newRoleId);
+                    return ResponseEntity.ok().body(resp);
+                } catch (EntityNotFoundException e) {
+                    resp.message = HttpStatus.NOT_FOUND.toString();
+                    resp.result = null;
+                    return ResponseEntity.ok().body(resp);
+                }
+            } else {
+                resp.message = HttpStatus.NOT_FOUND.toString();
+                resp.result = null;
+                return ResponseEntity.ok().body(resp);
             }
 
-/*    @PathVariable("roleId") String roleId)
-    {
-        ObjectNotValidException ex = new ObjectNotValidException(errors);
-        boolean checkIntegerType = ex.isNumeric(roleId);
-        if(checkIntegerType) {
-            int newRoleId = Integer.parseInt(roleId);
-            Response<Role> resp = new Response<Role>();
-            resp.message = HttpStatus.OK.toString();
-            resp.result = this.roleService.findOneRole(newRoleId);
-            return ResponseEntity.ok().body(resp);
-        } else {
-            resp.message = HttpStatus.NOT_FOUND.toString();
-            resp.result = null;
-            return ResponseEntity.ok().body(resp);
         }
-
-    }*/
 
 
     //POST
@@ -119,23 +115,38 @@ public class RoleController {
     @RequestMapping(value = "/{id}", method= RequestMethod.PUT)
     public ResponseEntity<Response<Role>> updateRole(
             @ApiParam(value = "Update a role object in database table", required = true)
-            @PathVariable int id, @Valid @RequestBody Role role,  Errors errors) {
+            @PathVariable String id, @Valid @RequestBody Role role,  Errors errors) {
         Response<Role> resp = new Response<Role>();
-
         if (errors.hasErrors()) {
             ObjectNotValidException ex = new ObjectNotValidException(errors);
             resp.message = ex.toString();
             return ResponseEntity.badRequest().body(resp);
         }
-        role.setId(id);
-        role = this.roleService.updateRole(role);
-        resp.result = role;
-        if(role == null){
+        boolean checkIntegerType = roleService.isNumeric(id);
+        if(checkIntegerType) {
+            try {
+                int newRoleId = Integer.parseInt(id);
+                resp.message = HttpStatus.OK.toString();
+                role.setId(newRoleId);
+                role = this.roleService.updateRole(role);
+                resp.result = role;
+                if(role == null){
+                    resp.message = HttpStatus.NOT_FOUND.toString();
+                } else{
+                    resp.message = HttpStatus.OK.toString();
+                }
+                return ResponseEntity.ok().body(resp);
+
+            } catch (EntityNotFoundException e) {
+                resp.message = HttpStatus.NOT_FOUND.toString();
+                resp.result = null;
+                return ResponseEntity.ok().body(resp);
+            }
+        } else {
             resp.message = HttpStatus.NOT_FOUND.toString();
-        }else{
-            resp.message = HttpStatus.OK.toString();
+            resp.result = null;
+            return ResponseEntity.ok().body(resp);
         }
-        return ResponseEntity.ok().body(resp);
     }
 
     //DELETE
@@ -149,11 +160,25 @@ public class RoleController {
     @RequestMapping(value = "/{roleId}", method= RequestMethod.DELETE)
     public ResponseEntity<Response<String>> deleteRoleById(
             @ApiParam(value = "Delete a role object from database table", required = true)
-            @PathVariable("roleId") int roleId) {
+            @PathVariable("roleId") String roleId) {
         Response<String> resp = new Response<String>();
-        resp.result = this.roleService.deleteRoleById(roleId);;
-        resp.message = HttpStatus.OK.toString();
-        return ResponseEntity.ok().body(resp);
+        boolean checkIntegerType = roleService.isNumeric(roleId);
+        if(checkIntegerType) {
+            try {
+                int newRoleId = Integer.parseInt(roleId);
+                resp.result = this.roleService.deleteRoleById(newRoleId);;
+                resp.message = HttpStatus.OK.toString();
+                return ResponseEntity.ok().body(resp);
+            } catch (EntityNotFoundException e) {
+                resp.message = HttpStatus.NOT_FOUND.toString();
+                resp.result = null;
+                return ResponseEntity.ok().body(resp);
+            }
+        } else {
+            resp.message = HttpStatus.NOT_FOUND.toString();
+            resp.result = null;
+            return ResponseEntity.ok().body(resp);
+        }
     }
 
 }

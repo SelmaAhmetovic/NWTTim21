@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import java.util.List;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 @RestController
@@ -57,11 +58,25 @@ public class UserController {
     @RequestMapping(value = "/{userId}", method= RequestMethod.GET)
     public ResponseEntity<Response<UserModel>> getUserById(
             @ApiParam(value = "User id from which user object will retrieve", required = true)
-            @PathVariable("userId") int userId) {
+            @PathVariable("userId") String userId) {
+        boolean checkIntegerType = userService.isNumeric(userId);
         Response<UserModel> resp = new Response<UserModel>();
-        resp.message = HttpStatus.OK.toString();
-        resp.result = this.userService.findOneUserModel(userId);
-        return ResponseEntity.ok().body(resp);
+        if(checkIntegerType) {
+            try {
+                int newUserId = Integer.parseInt(userId);
+                resp.message = HttpStatus.OK.toString();
+                resp.result = this.userService.findOneUserModel(newUserId);
+                return ResponseEntity.ok().body(resp);
+            } catch (EntityNotFoundException e) {
+                resp.message = HttpStatus.NOT_FOUND.toString();
+                resp.result = null;
+                return ResponseEntity.ok().body(resp);
+            }
+        } else {
+            resp.message = HttpStatus.NOT_FOUND.toString();
+            resp.result = null;
+            return ResponseEntity.ok().body(resp);
+        }
     }
 
     //POST
@@ -103,7 +118,7 @@ public class UserController {
     @RequestMapping(value = "/{userId}", method= RequestMethod.PUT)
     public ResponseEntity<Response<UserModel>> updateUser(
             @ApiParam(value = "Update an role object in database table", required = true)
-            @PathVariable int userId,
+            @PathVariable String userId,
             @Valid @RequestBody UserModel user, Errors errors) {
         Response<UserModel> resp = new Response<UserModel>();
         if (errors.hasErrors()) {
@@ -111,11 +126,25 @@ public class UserController {
             resp.message = ex.toString();
             return ResponseEntity.badRequest().body(resp);
         }
-        resp.message = HttpStatus.OK.toString();
-        UserModel userModel= this.userService.findOneUserModel(userId);
-        user.setId(userId);
-        resp.result = this.userService.addUser(user);
-        return ResponseEntity.ok().body(resp);
+        boolean checkIntegerType = userService.isNumeric(userId);
+        if(checkIntegerType) {
+            try {
+                int newUserId = Integer.parseInt(userId);
+                resp.message = HttpStatus.OK.toString();
+                UserModel userModel= this.userService.findOneUserModel(newUserId);
+                user.setId(newUserId);
+                resp.result = this.userService.addUser(user);
+                return ResponseEntity.ok().body(resp);
+            } catch (EntityNotFoundException e) {
+                resp.message = HttpStatus.NOT_FOUND.toString();
+                resp.result = null;
+                return ResponseEntity.ok().body(resp);
+            }
+        } else {
+            resp.message = HttpStatus.NOT_FOUND.toString();
+            resp.result = null;
+            return ResponseEntity.ok().body(resp);
+        }
 
     }
 
@@ -130,10 +159,24 @@ public class UserController {
     @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity<Response<String>> deleteUserById (
             @ApiParam(value = "Delete an user object from database table", required = true)
-            @PathVariable("userId") int userId) {
+            @PathVariable("userId") String userId) {
         Response<String> resp = new Response<String>();
-        resp.result = this.userService.deteleUserById(userId);;
-        resp.message = HttpStatus.OK.toString();
-        return ResponseEntity.ok().body(resp);
+        boolean checkIntegerType = userService.isNumeric(userId);
+        if(checkIntegerType) {
+            try {
+                int newUserId = Integer.parseInt(userId);
+                resp.result = this.userService.deteleUserById(newUserId);
+                resp.message = HttpStatus.OK.toString();
+                return ResponseEntity.ok().body(resp);
+            } catch (EntityNotFoundException e) {
+                resp.message = HttpStatus.NOT_FOUND.toString();
+                resp.result = null;
+                return ResponseEntity.ok().body(resp);
+            }
+        } else {
+            resp.message = HttpStatus.NOT_FOUND.toString();
+            resp.result = null;
+            return ResponseEntity.ok().body(resp);
+        }
     }
 }
