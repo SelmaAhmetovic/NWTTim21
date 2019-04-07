@@ -14,10 +14,10 @@ public class Calendar {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String name;
 
-    @NotNull
+    @NotNull(message = "User must not be null")
     private Integer user;
 
     protected Calendar() {

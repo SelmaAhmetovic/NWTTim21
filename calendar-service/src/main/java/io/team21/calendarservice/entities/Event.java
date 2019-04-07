@@ -1,5 +1,7 @@
 package io.team21.calendarservice.entities;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -12,23 +14,21 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotNull(message="Event name must be specified.")
+    @NotNull(message = "Event name must be specified.")
     @Size(min = 3, max = 50)
     private String name;
 
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 50, message = "Location must be between 1 and 50 characters long")
     private String location;
 
     @NotNull(message = "Time must be specified.")
-    @Size(min = 1, max = 5)
     private LocalTime time;
 
-    @NotNull
-    @NotNull(message="At least one day of the week must be specified.")
+    @NotNull(message = "At least one day of the week must be specified.")
     @Size(min = 1, max = 15)
     private String days;
 
-    @Size(min = 1, max = 15)
+    @Range(min = 1, max = 15, message = "Room must be between 1 and 15 characters long.")
     private Integer room;
 
     @ManyToOne
