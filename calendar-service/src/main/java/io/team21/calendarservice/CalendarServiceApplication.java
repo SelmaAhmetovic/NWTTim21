@@ -1,7 +1,11 @@
 package io.team21.calendarservice;
 
+import io.team21.calendarservice.entities.Calendar;
+import io.team21.calendarservice.repositories.CalendarRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class CalendarServiceApplication {
