@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 @Table(name = "calendars")
 public class Calendar {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
