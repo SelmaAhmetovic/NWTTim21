@@ -31,7 +31,7 @@ public class GeneralAdvice extends ResponseEntityExceptionHandler {
         List<String> details = new ArrayList<>();
         details.add(ex.getLocalizedMessage());
         ErrorResponse error = new ErrorResponse("Record Not Found", details);
-        return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(error, HttpStatus.NOT_FOUND);
     }
 
     @Override

@@ -74,7 +74,7 @@ public class EventController {
             @PathVariable(value = "eventId") Integer eventId) {
         return eventRepository.findByIdAndCalendarId(eventId, calendarId).map(event -> {
             eventRepository.delete(event);
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>("Event deleted.", HttpStatus.OK);
         }).orElseThrow(() -> new RecordNotFoundException(
                 "Calendar not found with id " + calendarId + " and event id" + eventId));
     }
