@@ -40,6 +40,15 @@ public class CalendarController {
         return new ResponseEntity<>(calendar, HttpStatus.CREATED);
     }
 
+    @PutMapping("/calendar/{id}")
+    public ResponseEntity<Calendar> updateCalendar(@PathVariable Integer id, @Valid @RequestBody Calendar newCalendar) {
+        return repository.findById(id).map(calendar -> {
+            calendar.setName(newCalendar.getName());
+            repository.save(calendar);
+            return new ResponseEntity<>(calendar, HttpStatus.OK);
+        }).orElseThrow(() -> new RecordNotFoundException("No calendar with id" + id));
+    }
+
     @DeleteMapping("/calendar/{id}")
     public ResponseEntity<String> deleteCalendar(@PathVariable Integer id) {
         Optional optionalCalendar = repository.findById(id);
