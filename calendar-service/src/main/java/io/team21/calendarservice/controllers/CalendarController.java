@@ -3,6 +3,7 @@ package io.team21.calendarservice.controllers;
 import io.team21.calendarservice.entities.Calendar;
 import io.team21.calendarservice.exceptions.RecordNotFoundException;
 import io.team21.calendarservice.repositories.CalendarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,8 @@ import java.util.Optional;
 
 @RestController
 public class CalendarController {
-    private final CalendarRepository repository;
-
-    CalendarController(CalendarRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private CalendarRepository repository;
 
     @GetMapping("/calendar")
     public List<Calendar> getCalendars() {
