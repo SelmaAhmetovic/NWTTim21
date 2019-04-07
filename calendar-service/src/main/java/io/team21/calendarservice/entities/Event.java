@@ -1,5 +1,8 @@
 package io.team21.calendarservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -8,6 +11,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalTime;
 
 @Entity
+@Table(name = "events")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,8 +34,10 @@ public class Event {
     @Range(min = 1, max = 15, message = "Room must be between 1 and 15 characters long.")
     private Integer room;
 
-    @ManyToOne
-    @NotNull(message = "Parent calendar must be specified")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "calendar_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Calendar calendar;
 
     protected Event() {
@@ -43,7 +49,6 @@ public class Event {
         this.setTime(time);
         this.setDays(days);
         this.setRoom(room);
-        this.setCalendar(calendar);
     }
 
     public String getName() {

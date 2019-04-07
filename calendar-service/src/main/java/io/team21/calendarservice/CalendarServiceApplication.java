@@ -14,12 +14,12 @@ public class CalendarServiceApplication {
         SpringApplication.run(CalendarServiceApplication.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner demo(CalendarRepository repository) {
-//        return (args) -> {
-//            // save a couple of calendars
-//            repository.save(new Calendar(1, "First"));
-//            repository.save(new Calendar(2));
-//        };
-//    }
+    @Bean
+    public CommandLineRunner demo(CalendarRepository repository) {
+        return (args) -> {
+            // save a couple of calendars
+            repository.save(new Calendar(1, "First"));
+            repository.save(new Calendar(2));
+        };
+    }
 }
