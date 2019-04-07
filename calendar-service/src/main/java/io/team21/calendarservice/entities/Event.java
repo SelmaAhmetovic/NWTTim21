@@ -10,7 +10,6 @@ import java.time.LocalTime;
 @Entity
 public class Event {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 

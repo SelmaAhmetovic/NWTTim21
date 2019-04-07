@@ -19,7 +19,7 @@ public class CalendarController {
         this.repository = repository;
     }
 
-    @GetMapping
+    @GetMapping("/calendar")
     public List<Calendar> getCalendars() {
         return repository.findAll();
     }
@@ -31,13 +31,13 @@ public class CalendarController {
         if (!calendar.isPresent()) {
             throw new RecordNotFoundException("No calendar with id " + id);
         }
-        return new ResponseEntity<>(calendar, HttpStatus.CREATED);
+        return new ResponseEntity<>(calendar, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/calendar")
     public ResponseEntity<Calendar> createCalendar(@Valid @RequestBody Calendar calendar) {
         repository.save(calendar);
-        return new ResponseEntity<>(calendar, HttpStatus.OK);
+        return new ResponseEntity<>(calendar, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/calendar/{id}")

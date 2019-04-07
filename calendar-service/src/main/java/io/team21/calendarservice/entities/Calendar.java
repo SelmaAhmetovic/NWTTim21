@@ -10,7 +10,6 @@ import javax.validation.constraints.Size;
 @Entity
 public class Calendar {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
