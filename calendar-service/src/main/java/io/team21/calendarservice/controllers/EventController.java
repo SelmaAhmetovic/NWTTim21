@@ -2,7 +2,9 @@ package io.team21.calendarservice.controllers;
 
 import io.team21.calendarservice.entities.Event;
 import io.team21.calendarservice.exceptions.RecordNotFoundException;
+import io.team21.calendarservice.repositories.CalendarRepository;
 import io.team21.calendarservice.repositories.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,20 +15,20 @@ import java.util.Optional;
 
 @RestController
 public class EventController {
-    private final EventRepository repository;
+    @Autowired
+    private EventRepository eventRepository;
 
-    EventController(EventRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private CalendarRepository calendarRepository;
 
     @GetMapping("/event")
     public List<Event> getEvents() {
-        return repository.findAll();
+        return eventRepository.findAll();
     }
 
     @GetMapping("/event/{id}")
     public ResponseEntity<Optional> getEventById(@PathVariable Integer id) {
-        Optional event = repository.findById(id);
+        Optional event = eventRepository.findById(id);
 
         if (!event.isPresent()) {
             throw new RecordNotFoundException("No event with id " + id);
@@ -34,30 +36,46 @@ public class EventController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
-    @PostMapping("/event")
-    public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event) {
-        repository.save(event);
-        return new ResponseEntity<>(event, HttpStatus.CREATED);
+    @GetMapping("/calendar/{calendarId}/event")
+    public List<Event> getAllEventsByCalendarId(@PathVariable Integer calendarId) {
+        return eventRepository.findByCalendarId(calendarId);
     }
 
-    @PutMapping("/event/{id}")
-    public ResponseEntity<Event> updateEvent(@Valid @RequestBody Event newEvent, @PathVariable Integer id) {
-        Optional optionalEvent = repository.findById(id);
-
-        if (!optionalEvent.isPresent()) {
-            throw new RecordNotFoundException("No event with id " + id);
-        }
-        repository.save(newEvent);
-        return new ResponseEntity<>(newEvent, HttpStatus.OK);
+    @PostMapping("/calendar/{calendarId}/event")
+    public Event createEvent(@PathVariable(value = "calendarId") Integer calendarId, @Valid @RequestBody Event event) {
+        return calendarRepository.findById(calendarId).map(calendar -> {
+            event.setCalendar(calendar);
+            return eventRepository.save(event);
+        }).orElseThrow(() -> new RecordNotFoundException("No calendar with id " + calendarId));
     }
 
-    @DeleteMapping("/event/{id}")
-    public ResponseEntity<String> deleteEvent(@PathVariable Integer id) {
-        Optional event = repository.findById(id);
-        if (!event.isPresent()) {
-            throw new RecordNotFoundException("No event with id " + id);
+    @PutMapping("/calendar/{calendarId}/event/{eventId}")
+    public Event updateEvent(
+            @PathVariable(value = "calendarId") Integer calendarId,
+            @PathVariable(value = "eventId") Integer eventId,
+            @Valid @RequestBody Event newEvent) {
+        if (!calendarRepository.existsById(calendarId)) {
+            throw new RecordNotFoundException("No Calendar with id " + calendarId);
         }
-        repository.deleteById(id);
-        return new ResponseEntity<>("Event deleted", HttpStatus.OK);
+
+        return eventRepository.findById(eventId).map(event -> {
+            event.setName(newEvent.getName());
+            event.setLocation(newEvent.getLocation());
+            event.setTime(newEvent.getTime());
+            event.setDays(newEvent.getDays());
+            event.setRoom(newEvent.getRoom());
+            return eventRepository.save(event);
+        }).orElseThrow(() -> new RecordNotFoundException("No Event with id " + eventId));
+    }
+
+    @DeleteMapping("/calendar/{calendarId}/event/{eventId}")
+    public ResponseEntity<?> deleteEvent(
+            @PathVariable(value = "calendarId") Integer calendarId,
+            @PathVariable(value = "eventId") Integer eventId) {
+        return eventRepository.findByIdAndCalendarId(eventId, calendarId).map(event -> {
+            eventRepository.delete(event);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(() -> new RecordNotFoundException(
+                "Calendar not found with id " + calendarId + " and event id" + eventId));
     }
 }
