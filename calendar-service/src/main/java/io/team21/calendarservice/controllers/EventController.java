@@ -13,6 +13,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * REST API for Events
+ * @author haris
+ */
 @RestController
 public class EventController {
     @Autowired
@@ -21,11 +25,20 @@ public class EventController {
     @Autowired
     private CalendarRepository calendarRepository;
 
+    /**
+     * Get all events
+     * @return List of events
+     */
     @GetMapping("/event")
     public List<Event> getEvents() {
         return eventRepository.findAll();
     }
 
+    /**
+     * Get event with specified ID
+     * @param id The id of the Event
+     * @return Event with specified ID
+     */
     @GetMapping("/event/{id}")
     public ResponseEntity<Optional> getEventById(@PathVariable Integer id) {
         Optional event = eventRepository.findById(id);
@@ -36,11 +49,22 @@ public class EventController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
+    /**
+     * Get all events for a calendar
+     * @param calendarId ID of the calendar
+     * @return A list of Events
+     */
     @GetMapping("/calendar/{calendarId}/event")
     public List<Event> getAllEventsByCalendarId(@PathVariable Integer calendarId) {
         return eventRepository.findByCalendarId(calendarId);
     }
 
+    /**
+     * Create a new event
+     * @param calendarId ID of the calendar
+     * @param event Name, time and days are required. Location and room are optional.
+     * @return The created event
+     */
     @PostMapping("/calendar/{calendarId}/event")
     public Event createEvent(@PathVariable(value = "calendarId") Integer calendarId, @Valid @RequestBody Event event) {
         return calendarRepository.findById(calendarId).map(calendar -> {
@@ -49,6 +73,13 @@ public class EventController {
         }).orElseThrow(() -> new RecordNotFoundException("No calendar with id " + calendarId));
     }
 
+    /**
+     * Update an event
+     * @param calendarId ID of the calendar
+     * @param eventId ID of the event
+     * @param newEvent Name, time and days are required. Location and room are optional.
+     * @return Edited event
+     */
     @PutMapping("/calendar/{calendarId}/event/{eventId}")
     public Event updateEvent(
             @PathVariable(value = "calendarId") Integer calendarId,
@@ -68,6 +99,12 @@ public class EventController {
         }).orElseThrow(() -> new RecordNotFoundException("No Event with id " + eventId));
     }
 
+    /**
+     * Delete an event
+     * @param calendarId ID of the calendar
+     * @param eventId ID of the event
+     * @return Status message
+     */
     @DeleteMapping("/calendar/{calendarId}/event/{eventId}")
     public ResponseEntity<?> deleteEvent(
             @PathVariable(value = "calendarId") Integer calendarId,

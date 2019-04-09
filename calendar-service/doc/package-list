@@ -1,0 +1,7 @@
+io.team21.calendarservice
+io.team21.calendarservice.advices
+io.team21.calendarservice.controllers
+io.team21.calendarservice.entities
+io.team21.calendarservice.exceptions
+io.team21.calendarservice.repositories
+io.team21.calendarservice.responses
