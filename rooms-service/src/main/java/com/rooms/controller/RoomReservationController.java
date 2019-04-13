@@ -1,6 +1,7 @@
 package com.rooms.controller;
 
 import com.rooms.exception.ObjectNotValidException;
+import com.rooms.model.Response;
 import com.rooms.model.Room;
 import com.rooms.model.RoomReservation;
 import com.rooms.repository.RoomReservationRepository;
@@ -45,15 +46,21 @@ public class RoomReservationController {
      * @return Success message
      */
     @PostMapping("/reservations")
-    public String createRoomReservation(@Valid @RequestBody RoomReservation reservation, Errors errors) {
+    public Response<Boolean> createRoomReservation(@Valid @RequestBody RoomReservation reservation, Errors errors) {
+    	
+    	Response<Boolean> response = new Response<Boolean>();    	
     	
     	if (errors.hasErrors()) {
     		ObjectNotValidException ex = new ObjectNotValidException(errors);
-            return ex.toString();
+    		response.result = false;
+    		response.message = ex.toString();
         }
     	
     	roomReservationRepository.save(reservation);
-    	return HttpStatus.OK.toString();
+    	response.result = true;
+    	response.message = HttpStatus.OK.toString();
+    	return response;
+    	
     }
     
     /**

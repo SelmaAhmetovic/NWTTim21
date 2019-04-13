@@ -1,6 +1,7 @@
 package com.rooms.controller;
 
 import com.rooms.exception.ObjectNotValidException;
+import com.rooms.model.Response;
 import com.rooms.model.Room;
 import com.rooms.repository.RoomRepository;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Rest API for Room
@@ -30,8 +32,18 @@ public class RoomController {
      * @returns List of rooms
      */
     @GetMapping("/rooms")
-    public List<Room> getAllRoom() {
-        return roomRepository.findAll();
+    public Response<List<Room>> getAllRoom() {
+    	Response<List<Room>> response = new Response<List<Room>>();
+    	response.result = roomRepository.findAll();
+    	response.message = HttpStatus.OK.toString();
+    	return response;
+    }
+    
+    @GetMapping("/rooms/{roomID}")
+    public Room getRoom(@PathVariable  Long roomID) {
+    	Room room =  roomRepository.findById(roomID).get();
+    	
+    	return room;
     }
     
 
