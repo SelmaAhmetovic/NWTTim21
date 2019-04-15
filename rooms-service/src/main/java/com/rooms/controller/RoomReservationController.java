@@ -80,6 +80,11 @@ public class RoomReservationController {
     	roomReservationRepository.save(reservation);
     	return HttpStatus.OK.toString();
     }
+
+    @GetMapping("/reservationsByUser/{userId}")
+    public List<RoomReservation> getReservationByUserId(@PathVariable String userId) {
+        return roomReservationRepository.findReservationsByUser(userId);
+    }
     
     /**
      * Deletes reservation by reservationId

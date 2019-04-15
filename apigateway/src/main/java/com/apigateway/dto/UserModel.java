@@ -1,6 +1,7 @@
 package com.apigateway.dto;
 
 import java.util.Collection;
+import java.util.List;
 
 public class UserModel {
 	public int id;
@@ -12,6 +13,10 @@ public class UserModel {
     public String userName;
 
     public String password;
+
+    public List<String> roleNames;
+
+    public UserModel(){}
 
     public void setId(int id) {
         this.id = id;

@@ -56,7 +56,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
     @RequestMapping(value = "/{userId}", method= RequestMethod.GET)
-    public UserModel getUserById(
+    public ResponseEntity<Response<UserModel>> getUserById(
             @ApiParam(value = "User id from which user object will retrieve", required = true)
             @PathVariable("userId") String userId) {
         boolean checkIntegerType = userService.isNumeric(userId);
@@ -66,16 +66,16 @@ public class UserController {
                 int newUserId = Integer.parseInt(userId);
                 resp.message = HttpStatus.OK.toString();
                 resp.result = this.userService.findOneUserModel(newUserId);
-                return resp.result;
+                return ResponseEntity.ok().body(resp);
             } catch (EntityNotFoundException e) {
                 resp.message = HttpStatus.NOT_FOUND.toString();
                 resp.result = null;
+                return ResponseEntity.badRequest().body(resp);
             }
         } else {
             resp.message = HttpStatus.NOT_FOUND.toString();
-            resp.result = null;
+            return ResponseEntity.badRequest().body(resp);
         }
-        return resp.result;
     }
 
     //POST

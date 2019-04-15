@@ -2,9 +2,16 @@ package com.apigateway.controllers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import com.apigateway.dto.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.apigateway.bll.CalendarService;
-import com.apigateway.dto.ApplicationConstants;
-import com.apigateway.dto.ApplicationInfo;
-import com.apigateway.dto.Response;
-import com.apigateway.dto.Room;
-import com.apigateway.dto.RoomReservation;
-import com.apigateway.dto.UserModel;
 import com.apigateway.helpers.ApplicationHelper;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
@@ -59,14 +60,47 @@ public class ApiGatewayController {
 			  Room.class);
 	
      
-      UserModel userResponse =  restTemplate.getForObject(helper.getUrl(eurekaClient, ApplicationConstants.UsersApplication,
-			  "/user/" + userID), UserModel.class);
-      
-      RoomReservation roomReservation = service.CreateReservation(userResponse, roomResponse );
-      
+      WrapperWithModel<UserModel> userResponse =  restTemplate.getForObject(helper.getUrl(eurekaClient, ApplicationConstants.UsersApplication,
+			  "/user/" + userID), WrapperWithModel.class);
+
+      ObjectMapper objectMapper = new ObjectMapper();
+      UserModel model = objectMapper.convertValue(userResponse.result, UserModel.class);
+
+      RoomReservation roomReservation = service.CreateReservation(model, roomResponse );
+
       Response response = restTemplate.postForObject(helper.getUrl(eurekaClient, ApplicationConstants.RoomsApplication,
 			  "/api/reservations"), roomReservation, Response.class);
-      
+
       return response;
-  } 
+  }
+
+    @Async
+    @RequestMapping("/user")
+    public ResponseEntity<WrapperWithModel> GetAllUsers() {
+       try{
+           @SuppressWarnings("unchecked")
+           String url = helper.getUrl(eurekaClient, ApplicationConstants.UsersApplication,"/user");
+           WrapperWithModel<List<UserModel>> response = restTemplate.getForObject(url, WrapperWithModel.class);
+           return  ResponseEntity.ok().body(response);
+
+       }catch (Exception e){
+           WrapperWithModel<String> err = new WrapperWithModel<String>();
+           err.message = "Error while getting users...";
+           return ResponseEntity.status(500).body(err);
+       }
+    }
+
+
+    @RequestMapping("/reservationsByUser/{userID}")
+    public ArrayList<RoomReservation> ListAllReservationsByUser(@PathVariable String userID) {
+            @SuppressWarnings("unchecked")
+            String apiUrl = "/api/reservationsByUser/{userId}";
+
+           String url = helper.getUrl(eurekaClient, ApplicationConstants.RoomsApplication,apiUrl);
+            ArrayList<RoomReservation>  response = restTemplate.getForObject(url, ArrayList.class, userID);
+            return response;
+
+
+    }
+
 }

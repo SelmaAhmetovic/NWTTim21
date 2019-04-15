@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import com.rooms.model.RoomReservation;
 
+import javax.transaction.Transactional;
+
 /**
  * Room reservation entity repository
  * @author Adijata
@@ -20,5 +22,10 @@ public interface RoomReservationRepository extends JpaRepository<RoomReservation
 	 @Query("select id, reservationTime from RoomReservation " + 
 	 		"where reservationTime <= :date")
 	public List<RoomReservation> getReservationsOnSelectedDate(@Param("date") Date date);
+
+	@Transactional
+	@Query(value = "SELECT * from room_reservation where room_reservation.user_id = ?1",
+			nativeQuery = true)
+	List<RoomReservation> findReservationsByUser(String userId);
 
 }
