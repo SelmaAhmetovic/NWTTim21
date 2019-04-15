@@ -4,57 +4,67 @@ import java.util.Collection;
 import java.util.List;
 
 public class UserModel {
-	public int id;
+    public int id;
 
-    public String firstName;
+    private String firstName;
 
-    public String lastName;
+    private String lastName;
 
-    public String userName;
+    private String userName;
 
-    public String password;
+    private String password;
 
-    public List<String> roleNames;
+    private List<String> roleNames;
 
-    public UserModel(){}
+    public UserModel() {
+    }
 
     public void setId(int id) {
         this.id = id;
-  }
+    }
 
-  public void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
-  }
+    }
 
-  public void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
-  }
+    }
 
-  public void setUserName(String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
-  }
+    }
 
-  public void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
-  }
+    }
 
-  public int getId() {
-       return id;
-  }
+    public int getId() {
+        return id;
+    }
 
-  public String getFirstName() {
-       return firstName;
-  }
-  public String getLastName() {
-       return lastName;
-  }
+    public String getFirstName() {
+        return firstName;
+    }
 
-  public String getUserName() {
-       return userName;
-  }
+    public String getLastName() {
+        return lastName;
+    }
 
-  public String getPassword() {
-       return password;
-  }
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public List<String> getRoleNames() {
+        return roleNames;
+    }
+
+    public void setRoleNames(List<String> roleNames) {
+        this.roleNames = roleNames;
+    }
 }
 
