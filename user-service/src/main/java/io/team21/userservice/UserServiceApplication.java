@@ -26,9 +26,9 @@ public class UserServiceApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(UserServiceApplication.class, args);
-		static final String topicExchangeName = "spring-boot-exchange";
+/*		public final String topicExchangeName = "spring-boot-exchange";
 
-		    static final String queueName = "spring-boot";
+		    public final String queueName = "spring-boot";
 
 		    @Bean
 		    Queue queue() {
@@ -62,12 +62,8 @@ public class UserServiceApplication {
 
 		    public static void main(String[] args) throws InterruptedException {
 		        SpringApplication.run(Application.class, args).close();
-		    }
-
-
+		    }*/
 
 	}
-
-
 
 }
