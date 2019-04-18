@@ -136,12 +136,12 @@ public class ApigatewayApplicationTests {
 		ArrayList<RoomReservation> reservations = new ArrayList<RoomReservation>();
 		reservations.add(roomReservation1);
 		reservations.add(roomReservation2);
-		Mockito
+/*		Mockito
 				.when(helper.getUrl(eurekaClient, "ApiGateway", "/filterReservationsByUser/{userId}"))
-				.thenReturn("http://localhost:8090/filterReservationsByUser/{userId}");
-		Mockito
+				.thenReturn("http://localhost:8090/filterReservationsByUser/{userId}");*/
+	/*	Mockito
 				.when(restTemplate.getForObject("http://localhost:8090/api/reservations", ArrayList.class))
-				.thenReturn(reservations);
+				.thenReturn(reservations);*/
 
 		List<RoomReservation> reservationFiltered = tester.FilterReservations(reservations, "1");
 
