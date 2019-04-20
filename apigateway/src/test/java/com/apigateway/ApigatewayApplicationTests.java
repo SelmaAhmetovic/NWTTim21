@@ -6,9 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import com.apigateway.bll.CalendarService;
@@ -18,9 +15,6 @@ import com.apigateway.dto.RoomReservation;
 import com.apigateway.dto.UserModel;
 
 import com.netflix.discovery.EurekaClient;
-
-import antlr.collections.List;
-
 import com.apigateway.helpers.ApplicationHelper;
 
 import static org.junit.Assert.assertEquals;

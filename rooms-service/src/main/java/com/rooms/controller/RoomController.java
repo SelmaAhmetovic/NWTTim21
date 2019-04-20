@@ -32,11 +32,11 @@ public class RoomController {
      * @returns List of rooms
      */
     @GetMapping("/rooms")
-    public Response<List<Room>> getAllRoom() {
+    public List<Room> getAllRoom() {
     	Response<List<Room>> response = new Response<List<Room>>();
     	response.result = roomRepository.findAll();
     	response.message = HttpStatus.OK.toString();
-    	return response;
+    	return response.result;
     }
     
     @GetMapping("/rooms/{roomID}")
