@@ -82,7 +82,7 @@ public class ApiGatewayController {
 
     @Async
     @RequestMapping("/user")
-    public ResponseEntity<WrapperWithModel> GetAllUsers() {
+    public ResponseEntity<WrapperWithModel<List<UserModel>>> GetAllUsers() {
         try {
             @SuppressWarnings("unchecked")
             String url = helper.getUrl(eurekaClient, ApplicationConstants.UsersApplication, "/user");
@@ -92,7 +92,7 @@ public class ApiGatewayController {
         } catch (Exception e) {
             WrapperWithModel<String> err = new WrapperWithModel<String>();
             err.message = "Error while getting users...";
-            return ResponseEntity.status(500).body(err);
+            return ResponseEntity.status(500).body(null);
         }
     }
 
@@ -103,6 +103,16 @@ public class ApiGatewayController {
         String url = helper.getUrl(eurekaClient, ApplicationConstants.RoomsApplication, apiUrl);
         ArrayList<RoomReservation> response = restTemplate.getForObject(url, ArrayList.class, userID);
         return response;
+
+    }
+
+    @RequestMapping("/filterReservationsByUser/{userID}")
+    public List<RoomReservation> FilterAllReservationsByUser(@PathVariable String userID) {
+        @SuppressWarnings("unchecked")
+        String apiUrl = "/api/reservations";
+        String url = helper.getUrl(eurekaClient, ApplicationConstants.RoomsApplication, apiUrl);
+        List<RoomReservation> response = restTemplate.getForObject(url, List.class, userID);
+        return service.FilterReservations(response,userID);
 
     }
 
