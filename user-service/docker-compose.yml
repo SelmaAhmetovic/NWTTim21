@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  mysql-standalone-container:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=testuser
+      - MYSQL_PASSWORD=testuser@123
+    volumes:
+      - /data/mysql
+  springboot-docker-compose-mysql-app-container:
+    image: springboot-docker-compose-mysql-app:1
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql-standalone-container
+    volumes:
+      - /data/springboot-docker-compose-mysql-app

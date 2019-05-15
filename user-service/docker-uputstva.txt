@@ -1,0 +1,41 @@
+cd C:\Users\Selma Ahmetovic\Documents\GitHub\nwt-team21\user-service
+docker build -t user-service-docker.jar .
+docker image ls
+docker run -p 9090:8762 user-service-docker.jar
+
+pozovem ovo za mysql
+docker run --name mysql-standalone -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=notes_app -e MYSQL_USER=root -e MYSQL_PASSWORD=root -d mysql:5.7
+
+docker-compose up user-service-container
+docker-compose up mysql-standalone-container
+
+docker-compose up user-service-container
+
+Moja ip adresa kuci
+192.168.1.4
+https://nickjanetakis.com/blog/docker-tip-35-connect-to-a-database-running-on-your-docker-host
+
+$ docker run --name=mysql-host --net=host -e MYSQL_ROOT_PASSWORD=root -v /storage/mysql-host/datadir:/var/lib/mysql -d mysql
+
+cp target/server-0.0.1-SNAPSHOT.jar ../../spring-boot-docker/files/user-service-docker.jar
+
+
+FROM openjdk:8
+EXPOSE 8762
+ADD target/user-service-docker.jar user-service-docker.jar
+ENTRYPOINT ["java", "-jar" , "/user-service-docker.jar"]
+
+
+FROM alpine-jdk:base
+MAINTAINER javaonfly
+COPY files/user-service-docker.jar /opt/lib/
+RUN mkdir /var/lib/user-repo
+COPY config-repo /var/lib/user-repo
+ENTRYPOINT ["/usr/bin/java"]
+CMD ["-jar", "/opt/lib/user-service-docker.jar"]
+VOLUME /var/lib/user-repo
+EXPOSE 8762
+
+______________________________________________________________________
+
+$ docker-compose up
