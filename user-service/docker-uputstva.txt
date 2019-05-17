@@ -37,5 +37,13 @@ VOLUME /var/lib/user-repo
 EXPOSE 8762
 
 ______________________________________________________________________
+docker run --name mysql-standalone -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=notes_app -e MYSQL_USER=root -e MYSQL_PASSWORD=root -d mysql:5.7
+
+docker-compose up room-service-container
+docker-compose up mysql-standalone-container
+
+
+
+
 
 $ docker-compose up
