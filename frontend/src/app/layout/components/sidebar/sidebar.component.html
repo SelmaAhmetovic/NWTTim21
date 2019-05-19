@@ -71,7 +71,12 @@
             <span>{{ 'More Themes' | translate }}</span>
         </a>-->
 
-      <a [routerLink]="['/tables']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <!--
+          POMOĆNE KOMPONENTE
+       -->
+
+
+      <!--<a [routerLink]="['/tables']" [routerLinkActive]="['router-link-active']" class="list-group-item">
         <i class="fa fa-fw fa-table"></i>&nbsp;
         <span>{{ 'Tables' | translate }}</span>
       </a>
@@ -90,7 +95,12 @@
       <a [routerLink]="['/components']" [routerLinkActive]="['router-link-active']" class="list-group-item">
         <i class="fa fa-th-list"></i>&nbsp;
         <span>{{ 'Component' | translate }}</span>
-      </a>
+      </a> -->
+
+
+      <!--
+       END POMOCNE KOMPONENTE
+       -->
 
         <div class="header-fields">
             <a (click)="rltAndLtr()" class="list-group-item">
@@ -140,6 +150,9 @@
                     </ul>
                 </li>
             </div>
+
+
+
             <div class="nested-menu">
                 <a class="list-group-item" (click)="addExpandClass('profile')">
                     <span><i class="fa fa-user"></i>&nbsp; John Smith</span>
