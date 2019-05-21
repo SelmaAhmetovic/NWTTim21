@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: mysql-standalone-container
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: hellokoding
+      MYSQL_ROOT_HOST: '%'
+    ports: 
+      - "3306:3306"
+    restart: always 
+  room-service-container:
+    image: room-service:1
+    build:
+      context: ./
+      dockerfile: Dockerfile   
+    volumes:
+      - /data/room-service
+    expose:
+      - "8084"      
+    ports: 
+      - "8084:8084"
+    depends_on:
+      - mysql
