@@ -4,19 +4,19 @@
   <div class="col-md-6">
       <div class="col-md-12 form-group">
         <label class="control-label">First name</label>
-        <input type="text" class="form-control" placeholder="First Name">
+        <input type="text" class="form-control" placeholder="First Name" [(ngModel)]="firstName">
       </div>
       <div class="col-md-12 form-group">
         <label class="control-label">Last Name</label>
-        <input type="text" class="form-control" placeholder="Last Name">
+        <input type="text" class="form-control" placeholder="Last Name" [(ngModel)]="lastName">
       </div>
       <div class="col-md-12 form-group">
         <label class="control-label">Username</label>
-        <input type="text" class="form-control" placeholder="Username">
+        <input type="text" class="form-control" placeholder="Username" [(ngModel)]="userName">
       </div>
       <div class="col-md-12 form-group">
         <label class="control-label">Password</label>
-        <input type="text" class="form-control" placeholder="Password">
+        <input type="text" class="form-control" placeholder="Password" [(ngModel)]="password">
       </div>
       <div class="col-md-12">
         <button class="btn btn-primary">Update Profile</button>
