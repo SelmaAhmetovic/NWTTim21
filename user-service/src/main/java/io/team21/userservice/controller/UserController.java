@@ -125,6 +125,7 @@ public class UserController {
             @PathVariable String userId,
             @Valid @RequestBody UserModel user, Errors errors) {
         Response<UserModel> resp = new Response<UserModel>();
+
         if (errors.hasErrors()) {
             ObjectNotValidException ex = new ObjectNotValidException(errors);
             resp.message = ex.toString();

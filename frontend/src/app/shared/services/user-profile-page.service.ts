@@ -14,4 +14,9 @@ export class UserProfilePageService {
       `${environment.userServiceUrl}/user/` + id);
   }
 
+  updateUser(id: any, body: any) {
+    return this.httpClient.get(
+      `${environment.userServiceUrl}/user/` + id, body);
+  }
+
 }
