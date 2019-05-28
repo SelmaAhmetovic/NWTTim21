@@ -15,7 +15,7 @@ export class UserProfilePageService {
   }
 
   updateUser(id: any, body: any) {
-    return this.httpClient.get(
+    return this.httpClient.put(
       `${environment.userServiceUrl}/user/` + id, body);
   }
 

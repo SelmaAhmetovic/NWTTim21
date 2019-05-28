@@ -33,14 +33,14 @@ export class UserProfilePageComponent implements OnInit {
   }
 
   updateProfile(firstName: any, lastName: any, userName: any, password: any) {
-    var user = new User();
+    const user = new User();
 /*    user.id=this.currentUser.id;*/
-    user.firstName=firstName;
-    user.lastName=lastName;
-    user.userName=userName;
-    user.password=password;
-    user.roleNames = ["admin"];
-    this._userProfilePageService.updateUser(this.currentUser.id,user).subscribe((r: any) => {
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.userName = userName;
+    user.password = password;
+    user.roleNames = ['admin'];
+    this._userProfilePageService.updateUser(this.currentUser.id, user).subscribe((r: any) => {
       this.currentUser = r.result;
       this.firstName = this.currentUser.firstName;
       this.lastName= this.currentUser.lastName;
