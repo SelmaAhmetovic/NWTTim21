@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Configuration
 public class RabbitConfiguration {
     private static final String LISTENER_METHOD = "receiveMessage";
-    /*@Value("${queue.name}")
+    @Value("${queue.name}")
     private String queueName;
     @Value("${fanout.exchange}")
     private String fanoutExchange;
@@ -48,5 +48,5 @@ public class RabbitConfiguration {
     @Bean
     MessageListenerAdapter listenerAdapter(QueueConsumer consumer) {
         return new MessageListenerAdapter(consumer, LISTENER_METHOD);
-    }*/
+    }
 }

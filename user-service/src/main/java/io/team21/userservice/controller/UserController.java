@@ -24,6 +24,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/user")
 @Api(value="Users", description="Operations pertaining to users in College schedule maker")
 public class UserController {
@@ -48,6 +49,7 @@ public class UserController {
 
 
     //GET BY ID
+
     @ApiOperation(value = "View an user by id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved an user"),
@@ -55,6 +57,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/{userId}", method= RequestMethod.GET)
     public ResponseEntity<Response<UserModel>> getUserById(
             @ApiParam(value = "User id from which user object will retrieve", required = true)
@@ -101,6 +104,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody()
     public ResponseEntity<Response<UserModel>> addNewUser(
@@ -129,12 +133,14 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/{userId}", method= RequestMethod.PUT)
     public ResponseEntity<Response<UserModel>> updateUser(
             @ApiParam(value = "Update an role object in database table", required = true)
             @PathVariable String userId,
             @Valid @RequestBody UserModel user, Errors errors) {
         Response<UserModel> resp = new Response<UserModel>();
+
         if (errors.hasErrors()) {
             ObjectNotValidException ex = new ObjectNotValidException(errors);
             resp.message = ex.toString();
@@ -170,6 +176,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity<Response<String>> deleteUserById (
             @ApiParam(value = "Delete an user object from database table", required = true)
