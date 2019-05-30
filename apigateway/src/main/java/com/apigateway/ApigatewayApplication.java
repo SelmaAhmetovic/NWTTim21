@@ -2,10 +2,11 @@ package com.apigateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.apigateway.bll.CalendarService;
 import com.apigateway.helpers.ApplicationHelper;
@@ -31,4 +32,5 @@ public class ApigatewayApplication {
 	public ApplicationHelper helper(){
 		 return new ApplicationHelper();
 	}
+	
  }

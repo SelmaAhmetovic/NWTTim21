@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { TokenStorageService } from '../../auth/token-storage.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -12,10 +13,14 @@ export class SidebarComponent implements OnInit {
     collapsed: boolean;
     showMenu: string;
     pushRightClass: string;
+    private roles: string[];
+    authority: string;
+    username: string;
+
 
     @Output() collapsedEvent = new EventEmitter<boolean>();
 
-    constructor(private translate: TranslateService, public router: Router) {
+    constructor(private tokenStorage: TokenStorageService, private translate: TranslateService, public router: Router) {
         this.router.events.subscribe(val => {
             if (
                 val instanceof NavigationEnd &&
@@ -28,10 +33,27 @@ export class SidebarComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log('test');
         this.isActive = false;
         this.collapsed = false;
         this.showMenu = '';
         this.pushRightClass = 'push-right';
+        this.authority = '';
+        this.username = this.tokenStorage.getUsername();
+        if (this.tokenStorage.getToken()) {
+            this.roles = this.tokenStorage.getAuthorities();
+            this.roles.every(role => {
+              if (role === 'ROLE_ADMIN') {
+                this.authority = 'admin';
+                return false;
+              } else if (role === 'ROLE_PM') {
+                this.authority = 'pm';
+                return false;
+              }
+              this.authority = 'user';
+              return true;
+            });
+          }
     }
 
 
@@ -73,5 +95,6 @@ export class SidebarComponent implements OnInit {
 
     onLoggedout() {
         localStorage.removeItem('isLoggedin');
+        this.tokenStorage.signOut();
     }
 }

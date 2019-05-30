@@ -6,16 +6,24 @@
             <form role="form">
                 <div class="form-content">
                     <div class="form-group">
-                        <input type="text" ng-model="name" class="form-control input-underline input-lg" id="" placeholder="{{ 'Email' | translate }}">
+                        <input type="text" [(ngModel)]="form.username" name="username" required class="form-control input-underline input-lg" id="" placeholder="{{ 'User Name' | translate }}">
                     </div>
 
                     <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" id="" placeholder="{{ 'Password' | translate }}">
+                        <input type="password" [(ngModel)]="form.password" name="password" required class="form-control input-underline input-lg" id="" placeholder="{{ 'Password' | translate }}">
                     </div>
                 </div>
-                <a class="btn rounded-btn" [routerLink]="['/dashboard']" (click)="onLoggedin()">{{ 'Log in' | translate }}</a>
+                <div class="form-group">
+                    <a class="btn rounded-btn" [routerLink]="['/dashboard']" (click)="onLoggedin()">{{ 'Log in' | translate }}</a>
+                    <a class="btn rounded-btn" [routerLink]="['/signup']">{{ 'Register' | translate }}</a>
+               
+                    <div style="margin-top: 15px" *ngIf="isLoginFailed" class="alert alert-danger">
+                      Login failed: Invalid username or password!
+                    </div>
+                  </div>
+                
                 &nbsp;
-                <a class="btn rounded-btn" [routerLink]="['/signup']">{{ 'Register' | translate }}</a>
+               
             </form>
         </div>
     </div>

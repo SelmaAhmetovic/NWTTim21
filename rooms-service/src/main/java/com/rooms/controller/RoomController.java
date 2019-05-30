@@ -53,7 +53,7 @@ public class RoomController {
      * @param errors
      * @return success message
      */
-    @PostMapping("/rooms")
+    @PostMapping("/room")
     public String createRooms(@Valid @RequestBody Room room, Errors errors) {
     	if (errors.hasErrors()) {
     		ObjectNotValidException ex = new ObjectNotValidException(errors);
@@ -87,7 +87,7 @@ public class RoomController {
      * @param roomId
      * @return success
      */
-    @DeleteMapping("/rooms/{roomId}")
+    @GetMapping("/room/delete/{roomId}")
     public Boolean deleteRoom(@PathVariable Long roomId)
     {
     	roomRepository.deleteById(roomId);

@@ -48,7 +48,7 @@
         <span>User Profile Page</span>
       </a>
 
-      <a [routerLink]="['/rooms-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <a *ngIf="authority === 'admin'"  [routerLink]="['/rooms-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
         <i class="fa fa-map-marker"></i>&nbsp;
         <span>Rooms Page</span>
       </a>
@@ -159,7 +159,7 @@
 
             <div class="nested-menu">
                 <a class="list-group-item" (click)="addExpandClass('profile')">
-                    <span><i class="fa fa-user"></i>&nbsp; John Smith</span>
+                    <span><i class="fa fa-user"></i>&nbsp; {{username}}</span>
                 </a>
                 <li class="nested" [class.expand]="showMenu === 'profile'">
                     <ul class="submenu">

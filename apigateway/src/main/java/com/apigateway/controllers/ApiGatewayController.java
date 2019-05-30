@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +33,7 @@ import aj.org.objectweb.asm.TypeReference;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin("http://localhost:4200")
 public class ApiGatewayController {
 
     @Autowired
@@ -50,13 +52,33 @@ public class ApiGatewayController {
     private QueueProducer queueProducer;
 
     @Async
-    @RequestMapping("/rooms")
+    @RequestMapping("/room")
+    @PreAuthorize("hasRole('ADMIN')")
     public ArrayList<Room> GetRooms() {
         @SuppressWarnings("unchecked")
         String url = helper.getUrl(eurekaClient, ApplicationConstants.RoomsApplication, "/api/rooms");
         ArrayList<Room> rooms = restTemplate.getForObject(url, ArrayList.class);
         return rooms;
     }
+    
+    @Async
+    @RequestMapping(value = "/room",  method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String SaveRoom(@Valid @RequestBody Room room) {
+        @SuppressWarnings("unchecked")
+        String response = restTemplate.postForObject(helper.getUrl(eurekaClient, ApplicationConstants.RoomsApplication,
+                "/api/room"), room, String.class);
+        return response;
+    }
+    
+    @Async
+    @RequestMapping("/roomDelete/{roomID}")
+    public Boolean DeleteRoom( @PathVariable Long roomID) {
+        @SuppressWarnings("unchecked")
+        String url = helper.getUrl(eurekaClient, ApplicationConstants.RoomsApplication, "/api/room/delete/" + roomID.toString());
+        Boolean success = restTemplate.getForObject(url, Boolean.class);
+        return success;
+    }
+
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @RequestMapping("/makeReservation/{userID}/{roomID}")
