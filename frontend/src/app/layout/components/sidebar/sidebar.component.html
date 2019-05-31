@@ -43,12 +43,12 @@
        NASE KOMPONENTE
         </a>-->
 
-      <a [routerLink]="['/user-profile-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <a [routerLink]="['/user-profile-page']" *ngIf="canSeeUser()" [routerLinkActive]="['router-link-active']" class="list-group-item">
         <i class="fa fa-user"></i>
         <span>User Profile Page</span>
       </a>
 
-      <a *ngIf="authority === 'admin'"  [routerLink]="['/rooms-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <a *ngIf="canSeeRooms()"  [routerLink]="['/rooms-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
         <i class="fa fa-map-marker"></i>&nbsp;
         <span>Rooms Page</span>
       </a>

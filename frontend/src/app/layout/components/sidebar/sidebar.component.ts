@@ -46,8 +46,8 @@ export class SidebarComponent implements OnInit {
               if (role === 'ROLE_ADMIN') {
                 this.authority = 'admin';
                 return false;
-              } else if (role === 'ROLE_PM') {
-                this.authority = 'pm';
+              } else if (role === 'ROLE_USER') {
+                this.authority = 'user';
                 return false;
               }
               this.authority = 'user';
@@ -56,7 +56,19 @@ export class SidebarComponent implements OnInit {
           }
     }
 
+    canSeeUser() {
+        if (this.tokenStorage.getToken()) {
+            this.roles = this.tokenStorage.getAuthorities();
+            return this.roles.indexOf('ROLE_USER') >= 0;
+        }
+    }
 
+    canSeeRooms() {
+        if (this.tokenStorage.getToken()) {
+            this.roles = this.tokenStorage.getAuthorities();
+            return this.roles.indexOf('ROLE_ADMIN') >= 0;
+        }
+    }
     eventCalled() {
         this.isActive = !this.isActive;
     }

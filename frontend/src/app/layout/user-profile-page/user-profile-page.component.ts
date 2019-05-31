@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
-import {UserProfilePageService} from "../../shared/services/user-profile-page.service";
-import {User} from "../../shared";
+import {UserProfilePageService} from '../../shared/services/user-profile-page.service';
+import {User} from '../../shared';
 
 @Component({
   selector: 'app-blank-page',
@@ -17,15 +17,14 @@ export class UserProfilePageComponent implements OnInit {
   userName: any;
   lastName: any;
 
-  constructor(private _userProfilePageService: UserProfilePageService)
-  {  }
+  constructor(private _userProfilePageService: UserProfilePageService) {  }
 
   private init() {
-    this._userProfilePageService.getUser('8').subscribe((r: any) => {
+    this._userProfilePageService.getUser('1').subscribe((r: any) => {
       this.currentUser = r.result;
       this.firstName = this.currentUser.firstName;
-      this.lastName= this.currentUser.lastName;
-      this.userName= this.currentUser.userName;
+      this.lastName = this.currentUser.lastName;
+      this.userName = this.currentUser.userName;
       this.password = this.currentUser.password;
     }, (error: any) => {
       console.log(error);
@@ -43,8 +42,8 @@ export class UserProfilePageComponent implements OnInit {
     this._userProfilePageService.updateUser(this.currentUser.id, user).subscribe((r: any) => {
       this.currentUser = r.result;
       this.firstName = this.currentUser.firstName;
-      this.lastName= this.currentUser.lastName;
-      this.userName= this.currentUser.userName;
+      this.lastName = this.currentUser.lastName;
+      this.userName = this.currentUser.userName;
       this.password = this.currentUser.password;
 
     }, (error: any) => {

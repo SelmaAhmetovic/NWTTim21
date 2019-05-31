@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { UserProfilePageRoutingModule } from './user-profile-page-routing.module';
 import { UserProfilePageComponent } from './user-profile-page.component';
 import { PageHeaderModule } from './../../shared/modules/page-header/page-header.module';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {UserProfilePageService} from '../../shared/services/user-profile-page.service';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -14,6 +15,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
       FormsModule,
       ReactiveFormsModule
     ],
-    declarations: [UserProfilePageComponent]
+    declarations: [UserProfilePageComponent],
+    providers: [UserProfilePageService]
 })
 export class UserProfilePageModule {}
