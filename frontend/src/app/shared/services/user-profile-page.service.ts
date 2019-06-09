@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from "../../../environments/environment";
+import {environment} from '../../../environments/environment';
 
 
 @Injectable()
@@ -11,12 +11,12 @@ export class UserProfilePageService {
 
   getUser(id: any) {
     return this.httpClient.get(
-      `${environment.userServiceUrl}/user/` + id);
+      `${environment.apiGatewayUrl}/user/` + id);
   }
 
   updateUser(id: any, body: any) {
     return this.httpClient.put(
-      `${environment.userServiceUrl}/user/` + id, body);
+      `${environment.apiGatewayUrl}/user/` + id, body);
   }
 
 }

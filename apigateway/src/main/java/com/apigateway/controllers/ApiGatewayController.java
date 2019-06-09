@@ -140,6 +140,24 @@ public class ApiGatewayController {
         return response;
     }
 
+    @Async
+    @RequestMapping("/user/{userId}")
+    public ResponseEntity<WrapperWithModel<UserModel>> GetUser( @PathVariable Long userId) {
+        @SuppressWarnings("unchecked")
+        String url = helper.getUrl(eurekaClient, ApplicationConstants.UsersApplication, "/user/" + userId.toString());
+        WrapperWithModel<UserModel>  user = restTemplate.getForObject(url, WrapperWithModel.class);
+        return ResponseEntity.ok().body(user);
+    }
+
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody()
+    public void UpdateUser( @PathVariable Long userId,
+                            @RequestBody UserModel userModel) {
+
+        String url = helper.getUrl(eurekaClient, ApplicationConstants.UsersApplication, "/user/" + userId.toString());
+        restTemplate.put(url, userModel);
+    }
+
     @RequestMapping("/reservationsByUser/{userID}")
     public ArrayList<RoomReservation> ListAllReservationsByUser(@PathVariable String userID) {
         @SuppressWarnings("unchecked")
