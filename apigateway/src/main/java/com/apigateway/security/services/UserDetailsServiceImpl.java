@@ -1,7 +1,14 @@
 package com.apigateway.security.services;
 
 
+import java.nio.charset.Charset;
+
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,8 +40,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     	 @SuppressWarnings("unchecked")
     	 
          String url = helper.getUrl(eurekaClient, ApplicationConstants.UsersApplication, "/user/login/" + username);
-         UserModel user = restTemplate.getForObject(url, UserModel.class);
+         ResponseEntity<UserModel> user = restTemplate.exchange(url,HttpMethod.GET, new HttpEntity<UserModel>(createHeaders("admin", "pwd")),UserModel.class);
          
-        return UserPrinciple.build(user);
+        return UserPrinciple.build(user.getBody());
     }
+    
+    HttpHeaders createHeaders(String username, String password){
+    	   return new HttpHeaders() {{
+    	         String auth = username + ":" + password;
+    	         byte[] encodedAuth = Base64.encodeBase64( 
+    	            auth.getBytes(Charset.forName("US-ASCII")) );
+    	         String authHeader = "Basic " + new String( encodedAuth );
+    	         set( "Authorization", authHeader );
+    	      }};
+    	}
 }

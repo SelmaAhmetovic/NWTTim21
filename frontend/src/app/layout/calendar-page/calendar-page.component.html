@@ -114,6 +114,7 @@
         <th>Starts at</th>
         <th>Ends at</th>
         <th>Remove</th>
+        <th>Save</th>
       </tr>
       </thead>
 
@@ -174,6 +175,11 @@
         <td>
           <button class="btn btn-danger" (click)="deleteEvent(event)">
             Delete
+          </button>
+        </td>
+        <td *ngIf="event.id == -1">
+          <button class="btn btn-primary" (click)="saveEvent(event)">
+            Save
           </button>
         </td>
       </tr>

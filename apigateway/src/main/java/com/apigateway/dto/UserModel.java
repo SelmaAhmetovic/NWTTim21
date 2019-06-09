@@ -18,6 +18,13 @@ public class UserModel {
 
     public UserModel() {
     }
+    
+    public UserModel(String firstName,String lastName,String userName, String password) {
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+    	this.password = password;
+    	this.userName = userName;
+    }
 
     public void setId(int id) {
         this.id = id;

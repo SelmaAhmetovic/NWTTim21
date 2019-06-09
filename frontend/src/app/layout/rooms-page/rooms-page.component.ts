@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class RoomsPageComponent implements OnInit {
 
-  constructor(private roomService: RoomService, private router: Router, ) {
+  constructor(private roomService: RoomService, private router: Router ) {
   }
 
   rooms  = [];
