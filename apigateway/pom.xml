@@ -43,6 +43,11 @@
 	        <artifactId>spring-boot-starter-web</artifactId>
 	        <!--<scope>provided</scope>-->
 	    </dependency>
+	    <dependency>
+			   <groupId>org.apache.httpcomponents</groupId>
+			   <artifactId>httpclient</artifactId>
+			   <version>4.5.3</version>
+			</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -69,6 +74,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            
         </dependencies>
     </dependencyManagement>
 	<build>

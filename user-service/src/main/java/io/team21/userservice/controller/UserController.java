@@ -107,7 +107,7 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody()
-    public ResponseEntity<Response<UserModel>> addNewUser(
+    public String addNewUser(
             @ApiParam(value = "Store an user object in database table", required = true)
             @Valid @RequestBody UserModel userModel, Errors errors) {
         Response<UserModel> resp = new Response<UserModel>();
@@ -115,11 +115,11 @@ public class UserController {
         if (errors.hasErrors()) {
             ObjectNotValidException ex = new ObjectNotValidException(errors);
             resp.message = ex.toString();
-            return ResponseEntity.badRequest().body(resp);
+            return ResponseEntity.badRequest().toString();
         }
         resp.message = HttpStatus.OK.toString();
         resp.result = this.userService.addUser(userModel);
-        return ResponseEntity.ok().body(resp);
+        return ResponseEntity.ok().toString();
 
     }
 

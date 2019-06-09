@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, ViewChild, TemplateRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ViewChild, TemplateRef, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours} from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
-
-
+import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
+import { CalendarEvent } from './calendar-event';
+import { CalendarService } from './calendar-page.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 const colors: any = {
   red: {
@@ -32,12 +33,16 @@ const colors: any = {
 })
 export class CalendarPageComponent implements OnInit {
 
-/*
+  constructor(private modal: NgbModal, private calendarService: CalendarService, private router: Router, private ref: ChangeDetectorRef) {
 
+  }
+
+  /*
 export class DemoComponent {*/
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
-  view: CalendarView = CalendarView.Month;
+
+  view: CalendarView;
 
   CalendarView = CalendarView;
 
@@ -66,51 +71,29 @@ export class DemoComponent {*/
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    }
-  ];
+  events: CalendarEvent[] = [];
+  activeDayIsOpen = true;
+  ngOnInit() {
 
-  activeDayIsOpen: boolean = true;
+    this.view = CalendarView.Month;
+    this.calendarService.findByUserId().subscribe(data => {
+      this.events = data;
+      this.events.forEach(element => {
+        element.start = new Date(element.start);
+        element.end = new Date(element.end);
+        element.color = colors.red,
+        element.draggable = true,
+        element.resizable = {
+          beforeStart: true,
+          afterEnd: true
+        };
 
-  constructor(private modal: NgbModal) {}
+      });
 
+      this.view = CalendarView.Month;
+      this.ref.detectChanges();
+    });
+  }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       this.viewDate = date;
@@ -123,6 +106,10 @@ export class DemoComponent {*/
         this.activeDayIsOpen = true;
       }
     }
+  }
+
+  ngInitDone() {
+    return true;
   }
 
   eventTimesChanged({
@@ -160,7 +147,10 @@ export class DemoComponent {*/
         resizable: {
           beforeStart: true,
           afterEnd: true
-        }
+        },
+        id: -1,
+        // tslint:disable-next-line:radix
+        userId: parseInt(localStorage.getItem('userId'))
       }
     ];
   }
@@ -177,5 +167,26 @@ export class DemoComponent {*/
     this.activeDayIsOpen = false;
   }
 
-  ngOnInit() {}
+  saveEvent(eventToSave: CalendarEvent) {
+    this.calendarService.save(eventToSave).subscribe(data => {
+      this.calendarService.findByUserId().subscribe(eventsData => {
+        this.events = eventsData;
+        this.events.forEach(element => {
+          element.start = new Date(element.start);
+          element.end = new Date(element.end);
+          element.color = colors.red,
+          element.draggable = true,
+          element.resizable = {
+            beforeStart: true,
+            afterEnd: true
+          };
+
+        });
+
+        this.view = CalendarView.Month;
+        this.ref.detectChanges();
+    });
+  };
+
+
 }

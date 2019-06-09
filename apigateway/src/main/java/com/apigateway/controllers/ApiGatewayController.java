@@ -3,6 +3,7 @@ package com.apigateway.controllers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.apigateway.dto.*;
 import com.apigateway.exception.ObjectNotValidException;
@@ -116,6 +117,27 @@ public class ApiGatewayController {
             err.message = "Error while getting users...";
             return ResponseEntity.status(500).body(null);
         }
+    }
+    
+    @Async
+    @RequestMapping("/events/{userId}")
+    public List<Event> GetAllEventsByUserId(@PathVariable Integer userId) {      
+        @SuppressWarnings("unchecked")
+        
+        
+        String url = helper.getUrl(eurekaClient, ApplicationConstants.CalendarApplication, "/event/" + userId.toString());
+        List<Event> events = restTemplate.getForObject(url, List.class);
+      
+        return events;
+    }
+
+    @Async
+    @RequestMapping(value = "/events",  method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String SaveEvent(@Valid @RequestBody Event event) {
+        @SuppressWarnings("unchecked")
+        String response = restTemplate.postForObject(helper.getUrl(eurekaClient, ApplicationConstants.CalendarApplication,
+                "/event"), event, String.class);
+        return response;
     }
 
     @RequestMapping("/reservationsByUser/{userID}")

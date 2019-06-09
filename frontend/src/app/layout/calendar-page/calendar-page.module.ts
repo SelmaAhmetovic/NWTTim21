@@ -10,6 +10,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { CalendarService } from './calendar-page.service';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
                 useFactory: adapterFactory
               })
     ],
-    declarations: [CalendarPageComponent]
+    declarations: [CalendarPageComponent],
+    providers: [CalendarService]
 })
 export class CalendarPageModule {}
