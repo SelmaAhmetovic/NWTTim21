@@ -15,11 +15,11 @@
         <input type="text" class="form-control" placeholder="Username" [(ngModel)]="userName">
       </div>
       <div class="col-md-12 form-group">
-        <label class="control-label">Password</label>
-        <input type="text" class="form-control" placeholder="Password" [(ngModel)]="password">
+        <label class="control-label">Update Password</label>
+        <input type="text" class="form-control" placeholder="Password" [(ngModel)]="newPassword">
       </div>
       <div class="col-md-12">
-        <button class="btn btn-primary" (click)="updateProfile(firstName,lastName,userName,password)">Update Profile</button>
+        <button class="btn btn-primary" (click)="updateProfile(firstName,lastName,userName,newPassword)">Update Profile</button>
       </div>
   </div>
 </div>

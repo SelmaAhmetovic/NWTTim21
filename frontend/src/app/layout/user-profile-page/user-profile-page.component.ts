@@ -14,6 +14,7 @@ export class UserProfilePageComponent implements OnInit {
   currentUser: any;
   firstName: any;
   password: any;
+  newPassword: any;
   userName: any;
   lastName: any;
 
@@ -26,6 +27,7 @@ export class UserProfilePageComponent implements OnInit {
       this.lastName = this.currentUser.lastName;
       this.userName = this.currentUser.userName;
       this.password = this.currentUser.password;
+      this.newPassword = '';
     }, (error: any) => {
       console.log(error);
     });
@@ -37,7 +39,11 @@ export class UserProfilePageComponent implements OnInit {
     user.firstName = firstName;
     user.lastName = lastName;
     user.userName = userName;
-    user.password = password;
+    if (this.newPassword !== '') {
+      user.password = password;
+    } else {
+      user.password = this.currentUser.password;
+    }
     user.roleNames = ['admin'];
     this._userProfilePageService.updateUser(this.currentUser.id, user).subscribe((r: any) => {
       this.currentUser = r.result;
