@@ -11,6 +11,8 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarService } from './calendar-page.service';
+import { RoomService } from '../rooms-page/rooms-page.service';
+
 
 
 @NgModule({
@@ -26,6 +28,6 @@ import { CalendarService } from './calendar-page.service';
               })
     ],
     declarations: [CalendarPageComponent],
-    providers: [CalendarService]
+    providers: [CalendarService, RoomService]
 })
 export class CalendarPageModule {}

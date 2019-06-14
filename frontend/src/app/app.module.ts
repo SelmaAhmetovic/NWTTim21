@@ -10,6 +10,8 @@ import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
 import { FormsModule } from '@angular/forms';
 import {UserProfilePageService} from './shared/services';
+ 
+
 
 
 import { httpInterceptorProviders } from '../app/layout/auth/auth-interceptor';

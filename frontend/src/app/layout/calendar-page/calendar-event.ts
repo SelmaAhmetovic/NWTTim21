@@ -8,6 +8,7 @@ export class CalendarEvent {
       resizable?: any;
       draggable?: boolean;
       roomId?: number;
-      id?: number
-      userId?: number
+      userId?: number;
+      eventId?: number;
+      roomName?:string;
 }

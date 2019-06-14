@@ -8,6 +8,8 @@ import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -15,87 +17,80 @@ import java.time.LocalTime;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer eventId;
 
-    @NotNull(message = "Event name must be specified.")
+    @NotNull(message = "Event title must be specified.")
     @Size(min = 3, max = 50)
-    private String name;
+    private String title;
 
-    @Size(min = 1, max = 50, message = "Location must be between 1 and 50 characters long")
-    private String location;
+    private LocalDateTime start;
+    
+    private LocalDateTime end;
 
-    @NotNull(message = "Time must be specified.")
-    private LocalTime time;
+    private Integer roomId;
 
-    @NotNull(message = "At least one day of the week must be specified.")
-    @Size(min = 1, max = 15)
-    private String days;
+    
+   
+    private Integer userId;
+    
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
+    }
+    
+    public int getEventId() {
+        return this.eventId;
+    }
+    
 
-    @Range(min = 1, max = 15, message = "Room must be between 1 and 15 characters long.")
-    private Integer room;
+  public String getTitle() {
+        return title;
+    }    
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "calendar_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Calendar calendar;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+    
+    public int getUserId() {
+        return this.userId;
+    }
+
+    public LocalDateTime getStart() {
+        return this.start;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+    
+    public LocalDateTime getEnd() {
+        return this.end;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
+    }
+
+    public Integer getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
+    }
 
     protected Event() {
     }
 
-    private Event(String name, String location, LocalTime time, String days, Integer room, Calendar calendar) {
-        this.setName(name);
-        this.setLocation(location);
-        this.setTime(time);
-        this.setDays(days);
-        this.setRoom(room);
+    private Event(String title, LocalDateTime start, LocalDateTime end, Integer roomId, Integer userId) {
+        this.setTitle(title);
+        this.setRoomId(roomId);
+        this.setStart(start);
+        this.setEnd(end);
+        this.setUserId(userId);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
-
-    public String getDays() {
-        return days;
-    }
-
-    public void setDays(String days) {
-        this.days = days;
-    }
-
-    public Integer getRoom() {
-        return room;
-    }
-
-    public void setRoom(Integer room) {
-        this.room = room;
-    }
-
-    public Calendar getCalendar() {
-        return calendar;
-    }
-
-    public void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
-    }
 }

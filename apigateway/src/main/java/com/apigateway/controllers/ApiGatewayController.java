@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.apigateway.dto.*;
 import com.apigateway.exception.ObjectNotValidException;
-import com.apigateway.helpers.QueueProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -48,9 +47,9 @@ public class ApiGatewayController {
 
     @Autowired
     private ApplicationHelper helper;
-
+/*
     @Autowired
-    private QueueProducer queueProducer;
+    private QueueProducer queueProducer;*/
 
     @Async
     @RequestMapping("/room")
@@ -130,6 +129,19 @@ public class ApiGatewayController {
       
         return events;
     }
+    
+    
+    @Async
+    @RequestMapping("/events/delete/{eventId}")
+    public String DeleteEvent(@PathVariable Integer eventId) {      
+        @SuppressWarnings("unchecked")
+        
+        
+        String url = helper.getUrl(eurekaClient, ApplicationConstants.CalendarApplication, "/event/delete/" + eventId.toString());
+        String resp = restTemplate.getForObject(url, String.class);
+      
+        return resp;
+    }
 
     @Async
     @RequestMapping(value = "/events",  method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -139,6 +151,7 @@ public class ApiGatewayController {
                 "/event"), event, String.class);
         return response;
     }
+    
 
     @Async
     @RequestMapping("/user/{userId}")
@@ -177,14 +190,15 @@ public class ApiGatewayController {
         return service.FilterReservations(response,userID);
 
     }
-
+    
+    /*
     @RequestMapping(value = "/userCreate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody()
     public ResponseEntity<Response<UserModel>> AddUser(@Valid @RequestBody UserModel userModel) {
         Response<UserModel> resp = new Response<UserModel>();
         resp.message = HttpStatus.OK.toString();
-      /*  restTemplate.postForObject(helper.getUrl(eurekaClient, ApplicationConstants.UsersApplication,
-                "/user"), userModel, Response.class);*/
+        restTemplate.postForObject(helper.getUrl(eurekaClient, ApplicationConstants.UsersApplication,
+                "/user"), userModel, Response.class);
         UserModel usr = new UserModel();
         usr = userModel;
         try {
@@ -194,5 +208,5 @@ public class ApiGatewayController {
         }
         resp.result = userModel;
         return ResponseEntity.ok().body(resp);
-    }
+    }*/
 }

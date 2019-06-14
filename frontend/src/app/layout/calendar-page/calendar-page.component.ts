@@ -5,8 +5,11 @@ import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import { CalendarEvent } from './calendar-event';
+import { Room } from '../rooms-page/room';
+
 import { CalendarService } from './calendar-page.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RoomService } from '../rooms-page/rooms-page.service';
 
 const colors: any = {
   red: {
@@ -33,7 +36,7 @@ const colors: any = {
 })
 export class CalendarPageComponent implements OnInit {
 
-  constructor(private modal: NgbModal, private calendarService: CalendarService, private router: Router, private ref: ChangeDetectorRef) {
+  constructor(private modal: NgbModal, private calendarService: CalendarService, private roomService:RoomService, private router: Router, private ref: ChangeDetectorRef) {
 
   }
 
@@ -69,6 +72,7 @@ export class DemoComponent {*/
     }
   ];
 
+  rooms: Room[] = [];
   refresh: Subject<any> = new Subject();
 
   events: CalendarEvent[] = [];
@@ -76,22 +80,30 @@ export class DemoComponent {*/
   ngOnInit() {
 
     this.view = CalendarView.Month;
-    this.calendarService.findByUserId().subscribe(data => {
-      this.events = data;
-      this.events.forEach(element => {
-        element.start = new Date(element.start);
-        element.end = new Date(element.end);
-        element.color = colors.red,
-        element.draggable = true,
-        element.resizable = {
-          beforeStart: true,
-          afterEnd: true
-        };
 
-      });
-
-      this.view = CalendarView.Month;
+    this.roomService.findAll().subscribe(roomsData => {
+      this.rooms = roomsData;
       this.ref.detectChanges();
+      console.log(roomsData);
+
+      this.calendarService.findByUserId().subscribe(data => {
+        this.events = data;
+        this.events.forEach(element => {
+          element.start = new Date(element.start);
+          element.end = new Date(element.end);
+          element.color = colors.red,
+          element.draggable = true,
+          element.resizable = {
+            beforeStart: true,
+            afterEnd: true
+          };
+          element.roomName = element.roomId != null ? this.rooms.find(x=>x.id == element.roomId).roomName:"Select room"
+  
+        });
+  
+        this.view = CalendarView.Month;
+        this.ref.detectChanges();
+      });
     });
   }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -148,15 +160,36 @@ export class DemoComponent {*/
           beforeStart: true,
           afterEnd: true
         },
-        id: -1,
+        eventId: -1,
         // tslint:disable-next-line:radix
-        userId: parseInt(localStorage.getItem('userId'))
+        userId: parseInt(localStorage.getItem('userId')),
+        roomName: "Select room"
       }
     ];
   }
 
   deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter(event => event !== eventToDelete);
+    this.calendarService.delete(eventToDelete).subscribe(data=>{
+      console.log(data);
+      this.calendarService.findByUserId().subscribe(eventsData => {
+        this.events = eventsData;
+        this.events.forEach(element => {
+          element.start = new Date(element.start);
+          element.end = new Date(element.end);
+          element.color = colors.red,
+          element.draggable = true,
+          element.resizable = {
+            beforeStart: true,
+            afterEnd: true
+          };
+          element.roomName = element.roomId != -1 ? this.rooms.find(x=>x.id == element.roomId).roomName:"Select room"
+
+        });
+
+        this.view = CalendarView.Month;
+        this.ref.detectChanges();
+    });
+    })
   }
 
   setView(view: CalendarView) {
@@ -169,6 +202,7 @@ export class DemoComponent {*/
 
   saveEvent(eventToSave: CalendarEvent) {
     this.calendarService.save(eventToSave).subscribe(data => {
+      console.log(data);
       this.calendarService.findByUserId().subscribe(eventsData => {
         this.events = eventsData;
         this.events.forEach(element => {
@@ -180,13 +214,20 @@ export class DemoComponent {*/
             beforeStart: true,
             afterEnd: true
           };
-
+          element.roomName = element.roomId != -1 ? this.rooms.find(x=>x.id == element.roomId).roomName:"Select room"
         });
 
         this.view = CalendarView.Month;
         this.ref.detectChanges();
     });
-  };
+    });
+  }
 
+  selected(room,event){
+    console.log(room);
+    event.roomId=room.id;
+    event.roomName = room.roomName;
+    this.ref.detectChanges();
+  }
 
 }

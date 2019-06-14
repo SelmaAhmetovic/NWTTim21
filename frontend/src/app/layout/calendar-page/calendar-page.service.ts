@@ -22,6 +22,14 @@ export class CalendarService {
 
   public save(event) {
 
-    return this.http.post<CalendarEvent>(this.calendarUrl, event);
+    return this.http.post(this.calendarUrl, event, {responseType: 'text'});
+    
   }
+
+  public delete(event) {
+    console.log(event);
+    return this.http.get(this.calendarUrl + 'delete/' + event.eventId,  {responseType: 'text'});
+  }
+
+
 }

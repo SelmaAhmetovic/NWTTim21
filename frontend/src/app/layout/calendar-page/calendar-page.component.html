@@ -110,7 +110,7 @@
       <tr>
         <th>Title</th>
         <th>Primary color</th>
-        <th>Secondary color</th>
+        <th>Room</th>
         <th>Starts at</th>
         <th>Ends at</th>
         <th>Remove</th>
@@ -136,11 +136,14 @@
           />
         </td>
         <td>
-          <input
-            type="color"
-            [(ngModel)]="event.color.secondary"
-            (change)="refresh.next()"
-          />
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{event.roomName}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a *ngFor="let item of rooms; let i = index" class="dropdown-item" (click)="selected(item,event)">{{item.roomName}}</a>            
+            </div>
+          </div>
         </td>
         <td>
           <input
@@ -177,11 +180,15 @@
             Delete
           </button>
         </td>
-        <td *ngIf="event.id == -1">
-          <button class="btn btn-primary" (click)="saveEvent(event)">
+        <td >
+          <button *ngIf="event.eventId == -1" class="btn btn-primary" (click)="saveEvent(event)">
             Save
           </button>
+          <button *ngIf="event.eventId != -1" class="btn btn-primary" (click)="saveEvent(event)">
+            Update
+          </button>
         </td>
+        
       </tr>
       </tbody>
     </table>
